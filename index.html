@@ -1,0 +1,44 @@
+<!--Take your CV site and split it into 2 pages:
+One for your 'Cover letter'
+One for your Experience, Skills and Education
+Add an image of yourself and put in the 'images' folder
+Move your stylesheet to a 'styles' folder
+Use relative pathing for the above
+Use an absolute pathing to add a social media site or other site of your choice-->
+<!DOCTYPE html>
+  <html>
+    <head>
+      <title>My CV</title>
+      <link rel="stylesheet" href="styles/cvStyle.css"/>
+    </head>
+    <body>
+        <div class="main_heading">
+            <h1 class="heading">Catherine McIlroy</h1>
+        </div>
+        <div id="about">
+            <div id="photo_container">
+                <img id="photo" src="images/picture_of_me.png" alt="Photo of Catherine McIlroy">
+            </div>
+            <div id="about_details">
+                <h3 class="heading">
+                    <a href="mailto:catmcilroy@outlook.com" style=color:dimgrey>Email</a>
+                </h3><br>
+                <h3 class="heading">
+                    <a href="tel:0862223127" style=color:dimgrey>Phone</a>
+                </h3><br>
+                <h3 class="heading">
+                    <a href="https://www.instagram.com/catmc91" style=color:dimgrey>See my Instagram profile</a>
+                </h3><br>
+                <p>
+                I am currently working as a self-employed locum pharmacist. After almost 10 years in this career I am 
+                interested in retraining and making a move to the <span font-weight= bold style= text-decoration:underline>
+                ICT</span> sector, specifically software development.
+                </p>
+            </div>
+            <div id="links">
+                <a href="Cover_Letter/index.html" style=color:dimgrey;>Click here to read my cover letter</a><br>
+                <a href="Experience_Skills_Education/index.html" style=color:dimgrey;>Click here to read more about me</a>
+            </div>
+        </div>
+    </body>
+  </html>
