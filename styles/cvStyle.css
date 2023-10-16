@@ -1,0 +1,103 @@
+.main_heading{
+    color:dimgrey;
+}
+
+@media(min-width:600px){
+    .main_heading {
+        display:flex;
+        border: 5px solid lightsteelblue;
+        justify-content:center;
+        margin:0 auto;
+        width:50%;
+        margin-top:40px;
+        margin-bottom:40px;
+    }
+
+    #photo_container{
+        flex:1;
+    }
+
+    #photo{
+        width:300px;
+        height:auto;
+    }
+
+    #about_details{
+        flex:1;
+        flex-direction:column;
+        margin:0 auto;
+        justify-content:right;
+        flex-basis:50%;
+        margin-bottom:20px;
+        margin-top:20px;
+    }
+
+    #about{
+        display:flex;
+        border: 2px solid lightsteelblue;
+        justify-content:center;
+        margin: 20px auto;
+        width:80%;
+        flex-direction:row;
+        padding-bottom:25px;
+        flex-wrap:wrap;
+    }
+
+    #links{
+        flex-wrap:wrap;
+        flex-basis:100%;
+        flex-direction:column;
+    }
+
+    #details{
+        display:flex;
+        justify-content:center;
+        justify-content:space-around;
+        margin:0 auto;
+        flex-direction:column;
+    }
+
+    #cover{
+        display:flex;
+        border: 2px solid lightsteelblue;
+        justify-content:center;
+        margin: 20px auto;
+        width:80%;
+        flex-direction:column;
+        padding:20px;
+    }
+
+    .column{
+        flex:1;
+        border: 2px solid lightsteelblue;
+        flex-direction:column;
+        margin:0 auto;
+        justify-content:center;
+        width:80%;
+        margin-bottom:20px;
+        margin-top:20px;
+    }
+
+}
+
+*{
+    text-align: center;
+}
+
+body{
+    background-color:aliceblue;
+}
+
+h2{
+    color:gray;
+}
+
+p{
+    color:black;
+}
+
+.heading{
+    text-shadow: 1px 1px 1px black;
+}
+
+
