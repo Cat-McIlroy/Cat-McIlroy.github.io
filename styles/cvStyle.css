@@ -1,3 +1,7 @@
+html{
+    display:flex;
+}
+
 body{
     background-color:aliceblue;
     text-align: center;
@@ -11,7 +15,7 @@ body{
 @media(min-width:600px){
     .main_heading {
         color:dimgray;
-        display:flex;
+        flex:1;
         border: 5px solid lightsteelblue;
         justify-content:center;
         margin:0 auto;
