@@ -39,7 +39,7 @@ function getMarks(){
             grade="D";
         }
         else{
-            grade="Fail";
+            grade="F";
         }
         
         document.getElementById("marksPrinted").innerHTML+=("Your marks for Subject "+i+" are: "+marks+"<br>Grade: "+grade+"<br><br>");
