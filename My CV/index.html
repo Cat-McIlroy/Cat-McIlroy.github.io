@@ -1,10 +1,17 @@
+<!--Take your CV site and split it into 2 pages:
+One for your 'Cover letter'
+One for your Experience, Skills and Education
+Add an image of yourself and put in the 'images' folder
+Move your stylesheet to a 'styles' folder
+Use relative pathing for the above
+Use an absolute pathing to add a social media site or other site of your choice-->
 <!DOCTYPE html>
   <html>
     <head>
       <title>My CV</title>
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
       <link rel="stylesheet" href="styles/cvStyle.css"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
         <div class="main_heading">
@@ -13,7 +20,7 @@
         <div class="about_container" "container">
             <div class="row">
                 <div class="photo_container" "col-xs-4">
-                <img class="photo" src="images/picture_of_me.png" alt="Photo of Catherine McIlroy">
+                <img class="photo" src="images/picture_of_me.webp" alt="Photo of Catherine McIlroy">
                 </div>
             </div>
             <div class="about_details" "row">
@@ -34,10 +41,11 @@
                 <p>
                 I am currently working as a self-employed locum pharmacist. After almost 10 years in this career I am interested in retraining and making a move to the ICT sector, specifically software development.
                 </p>
-                <a href="Cover_Letter/cover.html" style=color:dimgrey;>Click here to read my cover letter</a><br>
-                <a href="Experience_Skills_Education/details.html" style=color:dimgrey;>Click here to read more about me</a>
+                <a href="Cover_Letter/index.html" style=color:dimgrey;>Click here to read my cover letter</a><br>
+                <a href="Experience_Skills_Education/index.html" style=color:dimgrey;>Click here to read more about me</a>
                 </div>
             </div>
         </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     </body>
   </html>

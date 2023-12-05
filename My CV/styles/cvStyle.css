@@ -1,7 +1,3 @@
-html{
-    display:flex;
-}
-
 body{
     background-color:aliceblue;
     text-align: center;
@@ -87,3 +83,4 @@ body{
     }
 
 }
+
