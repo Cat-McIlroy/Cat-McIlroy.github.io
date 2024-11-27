@@ -1,3 +1,5 @@
+// Written by Moses
+
 //Gobals
 const flowerImages = "../images/quiz_images/"
 let imageArray = ["rose", "tulip", "daisy", "lavender", "lily", "poppy"];
@@ -73,11 +75,11 @@ function checkAnswer(){
         if(item.checked == true){          
             if(imageArray.length > 0){
                 if(image.includes(item.value)){
-                    $("#myModal .modal-body").text("Correct! the answer was " + item.value);
+                    $("#myModal .modal-body").text("Correct! The answer was " + item.value);
                     correct.push(1);           
                 }              
                 else{        
-                    $("#myModal .modal-body").text("Incorrect! the answer was " + image);    
+                    $("#myModal .modal-body").text("Incorrect! The answer was " + image);    
                 }
             }
             else{
