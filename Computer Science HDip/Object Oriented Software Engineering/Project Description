@@ -1,0 +1,45 @@
+For this module I was required to design a Hotel Reservation System application.
+I was also required to develop all the classes required to implement one of the use cases of the application, using either Java or C++.
+I chose to develop the classes for the "Make Reservation" use case, and I chose to use Java for these.
+
+The project was split into two parts and required the following criteria:
+
+Part 1:
+- Describe your system. Identify & describe the actors involved.
+
+- Construct a use case model. 
+
+- Select a distinct use case from the use case model and describe it comprehensively.
+Ensure that each description includes an alternate or exceptional flow. Explain why you chose this use case.
+
+- Create a conceptual class diagram of the chosen use case. The conceptual class diagram should
+demonstrate three or more of the following: attributes, relationships, navigability, association, multiplicity, and composition.
+
+- Describe the information conveyed by the conceptual class diagram and its significance in understanding the system's
+structure and relationships.
+
+- Create a glossary that lists and defines all the project
+related terms that require clarification.
+
+- Draw a system sequence diagram for one of the distinct use cases described in task 3. Describe what you
+understand from this system sequence diagram in your own words.
+
+- Develop a contract for one of the system operations in the sequence diagram. 
+
+- Create communication diagram based on the specified contract, ensuring that the diagram prominently
+showcases the implementation of named design patterns.
+
+Part 2: 
+- Propose and explain the agile development methodology you will follow, highlighting its distinctions from the waterfall approach.
+
+- Submit comprehensive artifacts documenting the agile methodology employed, including user stories, backlogs, and
+burndown charts, offering detailed insights into the project's progress and objectives.
+
+- Determine potential risks for your project and describe the quality and communication management strategy. 
+
+- Develop all the classes required to implement one of the use cases described in part 1 of the assessment in a suitable
+object oriented language (e.g., Java or C++).
+
+- Create test cases or scenarios to test the classes developed above, naming and justifying the test methodology followed.
+Describe the tests carried out, detailing how you will ensure that the classes are free from errors and detail the results of
+the tests.
