@@ -1,0 +1,39 @@
+For this project I was required to choose a type of online retail business that sells products to its customers. 
+The business, at minimum would store information about the products (stock) or services it sells, the suppliers, 
+the customers, the sales transactions, and the employees who handle the transactions.
+
+I chose an online beauty product retailer.
+Project criteria are detailed below.
+I have uploaded my finished written project, my SQL code, and my Python code.
+
+Part 1: Conceptual Design
+
+- Describe/introduce the chosen retail business and its objectives (200-400 words).
+- Identify the relevant entities of the business with their respective attributes, entity types and primary keys. 
+You should include all the core entities of the business.
+- Convert the entities and make sure that the tables are in a 3rd normal form.
+- Identify the relationships to support the required business rules and assumptions.
+- Draw an ER diagram for the system depicting the entities, relationships, cardinalities, 
+participations using your preferred ERD notation.
+
+Part 2: Logical and physical design
+
+- Create the corresponding database using DDL commands 
+- Create all the necessary tables identified above using DDL
+- Populate at least three of your tables with some data using DML (insert into statement)
+- Populate your database with a large data set representing a one-year transaction (01/01/2023 - 30/12/2023) on each table.  
+(Use online data generators such as Mockaroo or generate data to generate synthetic data.)
+
+Part 3: Write SQL Statements to answer the following queries
+
+- Show all the products along with the supplier detail who supplied the products.
+- Create a stored procedure that takes the start and end dates of the sales and display all the sales transactions 
+between the start and the end dates.
+- Create a view that shows the total number of items a customer buys from the business in October 2022 along with 
+the total price (use group by)
+- Create a trigger that adjusts the stock level every time a product is sold.
+- Create a report of the annual sales (2022) of the business showing the total number of products sold and the total
+price sold every month (use A group by with roll-up)
+- Display the growth in sales/services (as a percentage) for your business, from the 1st month of opening until now. 
+- Delete all customers who never buy a product from the business.
+- Use a reporting tool of your choice (e.g. Excel) to connect to your data and create a graphical representation of the result of question 6 in Part 3.
