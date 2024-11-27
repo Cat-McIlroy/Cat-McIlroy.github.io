@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+    <html lang="en-IE">
+        <head>
+            <title>The Flower Co. - All Flowers - Buy Flowers From Dublin's Best Florist</title>
+            
+<!-----------------------------Bootstrap import---------------------------------->
+            
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+            
+<!------------------------------BootStrap Icons Import---------------------------->
+            
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+            
+<!------------------------------ Google fonts import ----------------------------->
+            
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Original+Surfer&display=swap" rel="stylesheet">
+            
+                        
+<!------------------------------- External CSS link ------------------------------->
+            
+            <link rel="stylesheet" href="../styles/style.css"/>
+            
+<!----------------------------- Mobile Responsiveness ----------------------------->
+            
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+        </head>
+        
+<!------------------------ Main Page Content (by Catherine) ----------------------->
+        
+        <body class="homepage_background">
+            
+        <!----------------- Header and NavBar (written by Catherine) --------------->
+            
+            <header class="main_header">
+                <nav class="navbar">
+                    <div class="container-fluid">
+                        <a class="navbar-brand" href="../index.html">
+                        <img src="../images/Logo_header.png" alt="Logo" width="100%" height="auto" class="d-inline-block align-text-top">
+                        </a>
+                    </div>
+                    <ul class="topnav" id="dropdown_click">
+                        <li><a href="../index.html">Home</a></li>
+                        <li class="christmas_topnav"><a href="../christmas/christmas.html">Christmas</a></li>
+                        <li><a href="#bouquets">Flowers</a></li>
+                        <li><a href="../gifts/gifts.html">Gifts</a></li>
+                        <li class="topnav_right"><a href="../contact/contact.html">Contact</a></li>
+                        <li class="topnav_right"><a href="../about/about.html">About</a></li>
+                        <li class="topnav_right"><a href="#delivery">Delivery</a></li>
+                        <li class="dropdown_icon"><a href="">&#9776;</a></li>
+                    </ul>
+                </nav>
+            </header>
+            
+        <!------------ Flowers Page Intro (by Catherine)---------------------->
+            
+            <div class="container px-5 py-3 my-3 content-container flowers_intro">
+                <h1>Shop All Flowers</h1>
+            
+                <p>
+                <br>
+                Here at The Flower Co. we offer a wide range of freshly cut bouquets to suit every budget!<br><br>View our collection below
+                </p>
+            </div>
+            
+        <!--Flowers Products (product template written by Phillip. Edited by Catherine)-->
+            
+            <div class="container px-5 py-3 my-3 content-container text-center">
+                <div class="row justify-content-around">
+                    <div class="col-lg-6 mb-5">
+                        <div class="card first-product">
+                            <img src="../images/flowers_images/bouquet_1.jpg" class="card-img-top" alt="Picture of a bouquet of assorted orange flowers in a vase"
+                                data-bs-toggle="modal" data-bs-target="#exampleModal" class="open">
+                            <div class="card-body">
+                                <h3 class="card-title">Sunrise Bouquet</h3>
+                                <h4>€45</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-5">
+                        <div class="card second-product">
+                            <img src="../images/flowers_images/bouquet_2.jpg" class="card-img-top" alt="Picture of a bouquet of multi-coloured flowers in a vase">
+                            <div class="card-body">
+                                <h3 class="card-title">Colours of the Rainbow Bouquet</h3>
+                                <h4>€60</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-5">
+                        <div class="card third-product">
+                            <img src="../images/flowers_images/bouquet_3.jpg" class="card-img-top" alt="Picture of a bouquet of pink tulips in a vase">
+                            <div class="card-body">
+                                <h3 class="card-title">Pretty in Pink Bouquet</h3>
+                                <h4>€20</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-5">
+                        <div class="card fourth-product">
+                            <img src="../images/flowers_images/bouquet_4.jpg" class="card-img-top" alt="Picture of a bouquet of orange and white flowers in a vase ">
+                            <div class="card-body">
+                                <h3 class="card-title">Summer Glow Bouquet</h3>
+                                <h4>€30</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-5">
+                        <div class="card fifth-product">
+                            <img src="../images/flowers_images/bouquet_5.jpg" class="card-img-top" alt="Picture of a bouquet of orange and white flowers in a vase">
+                            <div class="card-body">
+                                <h3 class="card-title">Peaches and Cream Bouquet</h3>
+                                <h4>€25</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-5">
+                        <div class="card sixth-product">
+                            <img src="../images/flowers_images/bouquet_6.jpg" class="card-img-top" alt="Picture of a bouquet of blue, pink and white flowers in a vase">
+                            <div class="card-body">
+                                <h3 class="card-title">Midsummer Night's Dream Bouquet</h3>
+                                <h4>€20</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-5">
+                        <div class="card seventh-product">
+                            <img src="../images/flowers_images/bouquet_7.jpg" class="card-img-top" alt="Picture of a bouquet of pink roses in a vase">
+                            <div class="card-body">
+                                <h3 class="card-title">Kiss from a Rose Bouquet</h3>
+                                <h4>€40</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        <!------------ Product Pop-Ups (written by Phillip. Edited by Catherine for this page ------------------->
+            
+        <!-- Modal From Bootstrap Docs https://getbootstrap.com/docs/5.3/components/modal/ -->
+            
+        <!------------------------- Product 1 ------------------------------>
+            
+            <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 id="product-title" class="modal-title fs-5" id="exampleModalLabel">Sunrise Bouquet</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p id="product-description">With colours reminiscent of the sunrise, this beautiful bouquet is guaranteed to brighten up your day. <br>Featuring large headed roses and carnations in hues of apricot and coral, interspersed with sprays of pink and white gypsophila.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="orderbtn-1" type="button" class="btn btn-primary form-button"><i
+                                    class="bi bi-bag-fill"></i> Order</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        <!---------------------------- Product 2 -------------------------->
+            
+              <div class="modal fade" id="myModal_two" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 id="product-title" class="modal-title fs-5" id="exampleModalLabel">Colours of the Rainbow Bouquet</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p id="product-description">An explosion of vibrant colours! <br>Featuring a bird of paradise, orchids, hydrangeas, daises, tulips and roses in varying shades of blue, pink, red, orange and yellow.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="orderbtn-2" type="button" class="btn btn-primary form-button"><i
+                                    class="bi bi-bag-fill"></i> Order</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!--------------------------- Product 3 ---------------------->
+            
+            <div class="modal fade" id="myModal_three" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 id="product-title" class="modal-title fs-5" id="exampleModalLabel">Pretty in Pink Bouquet</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p id="product-description">Sometimes simplicity is the ultimate sophistication.<br>
+                            This bouquet screams elegance, featuring nothing but double tulips in a pretty shade of pink.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="orderbtn-3" type="button" class="btn btn-primary form-button"><i
+                                    class="bi bi-bag-fill"></i> Order</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!--------------------------- Product 4 ---------------------->
+            
+            <div class="modal fade" id="myModal_four" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 id="product-title" class="modal-title fs-5" id="exampleModalLabel">Summer Glow Bouquet</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p id="product-description">Experience summer all year round with this beautiful bouquet!<br>
+                            Featuring roses in both white and a vibrant orange hue, accompanied by tulips and snapdragons.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="orderbtn-4" type="button" class="btn btn-primary form-button"><i
+                                    class="bi bi-bag-fill"></i> Order</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!--------------------------- Product 5 ---------------------->
+            
+            <div class="modal fade" id="myModal_five" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 id="product-title" class="modal-title fs-5" id="exampleModalLabel">Peaches and Cream Bouquet</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p id="product-description">A beautiful combination of peach and cream toned flowers including irises and roses, combined with green foliage.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="orderbtn-5" type="button" class="btn btn-primary form-button"><i
+                                    class="bi bi-bag-fill"></i> Order</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+          <!--------------------------- Product 6 ---------------------->
+            
+            <div class="modal fade" id="myModal_six" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 id="product-title" class="modal-title fs-5" id="exampleModalLabel">Midsummer Night's Dream Bouquet</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p id="product-description">A whimsical collection of gypsophila in varying colours of blue, purple, pink and white.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="orderbtn-6" type="button" class="btn btn-primary form-button"><i
+                                    class="bi bi-bag-fill"></i> Order</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+              <!--------------------------- Product 7 ---------------------->
+            
+            <div class="modal fade" id="myModal_seven" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 id="product-title" class="modal-title fs-5" id="exampleModalLabel">Kiss from a Rose Bouquet</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p id="product-description">Simple and classic!<br>A beautifully fragrant bouquet of delicate pink roses.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="orderbtn-7" type="button" class="btn btn-primary form-button"><i
+                                    class="bi bi-bag-fill"></i> Order</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        <!------------------------ Footer was written by Philipp -------------------> 
+            
+            <footer id="footer" class="pt-3 pb-2">
+                <div class="container">
+                    <div class="row text-left justify-content-center">
+                        <div class="col-md-2 my-3 text-center">
+                            <img class="img-fluid footer-logo" src="../images/logoWhiteBackground.png"
+                                alt="The logo of The Flower Co.">
+                        </div>
+
+                        <div class="col-md-3">
+                            <h5 class="footer-heading mb-3">The Flower Co.</h5>
+                            <p>The Flower Co. is Ireland's leading florist. We offer a
+                                beautiful selection of fresh flower arrangements and gifts for every occassion.</p>
+                        </div>
+
+                        <div class="col-md-3">
+                            <h5 class="footer-heading mb-3">Our Products</h5>
+                            <ul class="footer-list">
+                                <li><a class="footer-link" href="../flowers/flowers.html">Flowers</a></li>
+                                <li><a class="footer-link" href="../gifts/gifts.html">Gifts</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="col-md-4">
+                            <h5 class="footer-heading mb-3">Contact</h5>
+                            <ul class="footer-list">
+                                <li><i class="bi bi-chat-fill footer-icon"></i><a class="footer-link"
+                                        href="../contact/contact.html">Contact Form</a>
+                                </li>
+                                <li><i class="bi bi-envelope-fill footer-icon"></i><a class="footer-link"
+                                        href="mailto:example@theflower.co">example@theflower.co</a>
+                                </li>
+                                <li><i class="bi bi-telephone-fill footer-icon"></i><a class="footer-link"
+                                        href="tel:0112341234">(01) 1234
+                                        1234</a></li>
+                                <li><i class="bi bi-geo-alt-fill footer-icon"></i>Phoenix Park,
+                                    Castleknock, Dublin, D08 E1W3</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </footer>
+            
+<!---------------------------- jQuery import ------------------------------>
+        
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+            
+<!------------------------------ JavaScript link --------------------------------->
+    
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+            <script type="text/javascript" src="../scripts/productsScript.js"></script>
+            <script type="text/javascript" src="../scripts/navbarScript.js"></script>
+
+        </body>
+    </html>

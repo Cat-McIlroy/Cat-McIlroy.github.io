@@ -1,0 +1,681 @@
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&family=Poppins:wght@400;500&family=Original+Surfer&family=Open+Sans&display=swap');
+
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Open Sans', sans-serif;
+}
+
+/*#############  Page Background (written by Catherine) #############*/
+
+.homepage_background {
+    background-image: url(../images/background_image.png);
+    background-attachment: fixed;
+    background-position: center center;
+    background-size: cover;
+}
+
+.background {
+    background-image: url(../images/background_image.png);
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+/*################  Nav Bar (written by Catherine) #################*/
+
+nav ul {
+    width: 100%;
+    background-color: #f6f6f6;
+    margin: 0;
+    padding: 0;
+    border-bottom: 0.5rem solid #92b09d;
+}
+
+ul.topnav li {
+    list-style: none;
+    float: left;
+}
+
+ul.topnav li.topnav_right {
+    float: right;
+}
+
+ul.topnav li a {
+    display: block;
+    text-decoration: none;
+    min-height: 16px;
+    padding: 14px;
+    text-transform: uppercase;
+    color: #92b09d;
+    transition: 0.7s ease;
+}
+
+ul.topnav li a:hover {
+    background-color: #92b09d;
+    color: white;
+}
+
+ul.christmas_border li a {
+    display: block;
+    text-decoration: none;
+    min-height: 16px;
+    padding: 14px;
+    text-transform: uppercase;
+    color: #92b09d;
+    transition: 0.7s ease;
+}
+
+ul.christmas_border li a:hover {
+    background-color: #92b09d;
+    color: white;
+}
+
+ul.topnav li.dropdown_icon {
+    display: none;
+}
+
+.container-fluid {
+    padding: 0;
+}
+
+.navbar {
+    padding: 0;
+    background-color: #f6f6f6;
+}
+
+.navbar-brand {
+    padding: 0;
+    margin: 0;
+}
+
+/*################ NavBar on Mobile Device (written by Catherine)#################*/
+
+@media screen and (max-width: 690px) {
+
+    ul.topnav li:not(:nth-child(1)) {
+        display: none;
+    }
+
+    ul.topnav li.dropdown_icon {
+        display: block;
+        float: right;
+    }
+
+    ul.topnav.mobile .dropdown_icon {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    ul.topnav.mobile {
+        position: relative;
+    }
+
+    ul.topnav.mobile li {
+        display: block;
+        float: none;
+    }
+
+    ul.topnav.mobile li a {
+        display: block;
+        text-align: left;
+    }
+}
+
+/*############## Homepage Divs (written by Catherine #############*/
+
+.parent_container {
+    color: #667B6D;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 50px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.child {
+    flex: 1;
+    width: 70%;
+    box-sizing: border-box;
+    background-color: #f6f6f6;
+    text-align: center;
+    padding: 50px;
+    border: 5px solid #92b09d;
+    border-radius: 15px;
+    box-shadow: 10px 10px 5px #667B6D;
+}
+
+h2.homepage_h2 {
+    font-family: 'Original Surfer', sans-serif;
+    font-size: 4vw;
+    text-transform: uppercase;
+    margin-bottom: 50px;
+    text-shadow: 1px 1px 1px #667B6D;
+}
+
+.product_container {
+    display: inline-flex;
+    justify-content: space-between;
+    gap: 25px;
+}
+
+.text_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.image {
+    max-width: 50%;
+    height: auto;
+}
+
+/*############ Flowers Products Intro (written by Catherine) ################*/
+
+.flowers_intro {
+    font-family: 'Original Surfer';
+    text-align: center;
+    margin-top: 50px !important;
+    padding: 20px;
+    box-shadow: 10px 10px 5px #667B6D;
+}
+
+.flowers_intro h1 {
+    text-shadow: 1px 1px 1px #667B6D;
+}
+
+/*############ Divs on Mobile Device (written by Catherine)################*/
+
+@media screen and (max-width: 865px) {
+    .product_container {
+        display: block !important;
+    }
+}
+
+/*############### Buttons (written by Catherine) ###############*/
+
+.button {
+    background-color: #92b09d;
+    color: #f6f6f6;
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px 15px;
+    border: 1px solid #667B6D;
+    border-radius: 10px;
+    box-shadow: 2px 2px 1px #667B6D;
+    transition: 0.3s ease;
+}
+
+.button:hover {
+    background-color: #f6f6f6;
+    color: #92b09d;
+}
+
+.button a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.button a:hover {
+    color: inherit;
+}
+
+/*############## Products (written by Phillip. Border-radius and margin-bottom edited by Catherine) ################*/
+
+.card {
+    color: #92b09d;
+    min-height: 100%;
+    margin: 0 auto;
+}
+
+.card h3 {
+    font-family: 'Original Surfer', sans-serif;
+}
+
+.content-container {
+    background-color: #f6f6f6;
+    color: #667B6D;
+    border-radius: 15px;
+    border: 0.5rem solid #92b09d;
+    margin-bottom: 50px !important;
+    box-shadow: 10px 10px 5px #667B6D;
+}
+
+/*################# Footer (written by Phillip) ##################*/
+
+.footer-icon {
+    margin-right: 5px;
+}
+
+.footer-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.footer-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.footer-logo {
+    height: 100px;
+}
+
+.footer-heading {
+    text-transform: capitalize;
+    font-weight: bold;
+}
+
+#footer {
+    margin-top: auto;
+    background-color: #f6f6f6;
+    color: #92b09d;
+    border-top: 1rem solid #92b09d;
+    font-family: 'Poppins', sans-serif;
+}
+
+/*****************************************************************************/
+/*#################### Christmas Edits (written by Catherine)################*/
+/*****************************************************************************/
+
+/*###### Christmas Navbar - animated border created following tutorial at Winterwind Inc. https://youtu.be/9QvdzNiqZXw?si=cDuSGsxEcAulMRjp #######*/
+
+nav ul.christmas_border {
+    position: relative;
+    border: none;
+}
+
+nav ul.christmas_border::before {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: 0px;
+    right: 0px;
+    bottom: -5px;
+    z-index: -1;
+    background: repeating-linear-gradient(-45deg, #D6001C 0, #D6001C 10px, white 10px, white 20px, green 20px, green 30px, #D6001C 30px, #D6001C 40px);
+    animation: animate 15s linear infinite;
+}
+
+/*######### Christmas Candy Cane Text Effect - created following tutorial at Bryt Tech Tips https://youtu.be/Vw8Gf4AJsos?si=2Hadk-_7WItIoF_O ###########*/
+
+ul.topnav li.christmas_topnav a {
+    text-shadow: none;
+    filter: drop-shadow(1px 1px 0.05em black);
+    color: transparent;
+    background: repeating-linear-gradient(-45deg,
+            #D6001C 0 0.15em, white 0 0.25em);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+ul.christmas_border li.christmas_topnav a {
+    text-shadow: none;
+    filter: drop-shadow(1px 1px 0.05em black);
+    color: transparent;
+    background: repeating-linear-gradient(-45deg,
+            #D6001C 0 0.15em, white 0 0.25em);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+/*################ Snowfall Button Animation on Hover - created following tutorial at https://codepen.io/Calleb/pen/dyVRvyW ###################*/
+
+ul.topnav li.christmas_topnav:hover {
+    text-shadow: 1px 1px 1px black;
+    background: #191970;
+    background-image: url("data:image/svg+xml,%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 50 50' style='enable-background:new 0 0 50 50%3B' xml:space='preserve'%3E%3Cstyle type='text/css'%3E.st1%7Bopacity:0.3%3Bfill:%23FFFFFF%3B%7D.st3%7Bopacity:0.1%3Bfill:%23FFFFFF%3B%7D%3C/style%3E%3Ccircle class='st1' cx='5' cy='8' r='1'/%3E%3Ccircle class='st1' cx='38' cy='3' r='1'/%3E%3Ccircle class='st1' cx='12' cy='4' r='1'/%3E%3Ccircle class='st1' cx='16' cy='16' r='1'/%3E%3Ccircle class='st1' cx='47' cy='46' r='1'/%3E%3Ccircle class='st1' cx='32' cy='10' r='1'/%3E%3Ccircle class='st1' cx='3' cy='46' r='1'/%3E%3Ccircle class='st1' cx='45' cy='13' r='1'/%3E%3Ccircle class='st1' cx='10' cy='28' r='1'/%3E%3Ccircle class='st1' cx='22' cy='35' r='1'/%3E%3Ccircle class='st1' cx='3' cy='21' r='1'/%3E%3Ccircle class='st1' cx='26' cy='20' r='1'/%3E%3Ccircle class='st1' cx='30' cy='45' r='1'/%3E%3Ccircle class='st1' cx='15' cy='45' r='1'/%3E%3Ccircle class='st1' cx='34' cy='36' r='1'/%3E%3Ccircle class='st1' cx='41' cy='32' r='1'/%3E%3C/svg%3E");
+    background-position: 0px 0px;
+    animation: animatedBackground 10s linear infinite;
+}
+
+/*######################### Christmas Background ##########################*/
+
+.christmas_background {
+    background-image: linear-gradient(black, #191970, white);
+}
+
+/*################### Background Snowfall Animation - created following tutorial at https://webdesign.tutsplus.com/how-to-create-animated-snow-on-a-website-with-css-and-javascript--cms-93562t #######################*/
+
+#snow-container {
+    height: 100vh;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    transition: opacity 500ms;
+    width: 100%;
+    z-index: -1;
+}
+
+.snow {
+    animation: fall ease-in infinite, sway ease-in-out infinite;
+    color: #DBF0F9 !important;
+    position: absolute;
+}
+
+
+@keyframes fall {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        top: 100vh;
+        opacity: 1;
+    }
+}
+
+@keyframes sway {
+    0% {
+        margin-left: 0;
+    }
+
+    25% {
+        margin-left: 50px;
+    }
+
+    50% {
+        margin-left: -50px;
+    }
+
+    75% {
+        margin-left: 50px;
+    }
+
+    100% {
+        margin-left: 0;
+    }
+}
+
+/*######################## Homepage Christmas Div ##########################*/
+
+/*animated border created following tutorial at Winterwind Inc. https://youtu.be/9QvdzNiqZXw?si=cDuSGsxEcAulMRjp*/
+
+.christmas {
+    position: relative;
+    border: none;
+    box-shadow: none;
+}
+
+.christmas:before {
+    content: "";
+    position: absolute;
+    border-radius: 15px;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    z-index: -1;
+    background: repeating-linear-gradient(-45deg, #D6001C 0, #D6001C 10px, white 10px, white 20px, green 20px, green 30px, #D6001C 30px, #D6001C 40px);
+    animation: animate 15s linear infinite;
+}
+
+@keyframes animate {
+    from {
+        background-position: 0;
+    }
+
+    to {
+        background-position: 500px;
+    }
+}
+
+/* Christmas Candy Cane Text Effect - created following tutorial at Bryt Tech Tips https://youtu.be/Vw8Gf4AJsos?si=2Hadk-_7WItIoF_O */
+
+.christmas_font {
+    font-family: 'Original Surfer', sans-serif;
+    text-shadow: none !important;
+    filter: drop-shadow(1px 1px 0.05em black);
+    color: transparent;
+    background: repeating-linear-gradient(-45deg,
+            #D6001C 0 0.15em, white 0 0.25em);
+    -webkit-background-clip: text;
+    background-clip: text;
+    font-size: 4vw;
+}
+
+.christmas_text {
+    color: #D6001C;
+}
+
+/*####################### Christmas Button #############################*/
+
+.christmas_button {
+    background-color: #D6001C;
+    color: white;
+    border: 1px solid white;
+    box-shadow: 2px 2px 1px black;
+}
+
+/*Snowfall Button Animation on Hover - created following tutorial at https://codepen.io/Calleb/pen/dyVRvyW*/
+
+@keyframes animatedBackground {
+    0% {
+        background-position: 0 0;
+    }
+
+    100% {
+        background-position: 0px 300px;
+    }
+}
+
+.christmas_button:hover {
+    color: white;
+    text-shadow: 1px 1px 1px black;
+    background: #191970;
+    background-image: url("data:image/svg+xml,%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 50 50' style='enable-background:new 0 0 50 50%3B' xml:space='preserve'%3E%3Cstyle type='text/css'%3E.st1%7Bopacity:0.3%3Bfill:%23FFFFFF%3B%7D.st3%7Bopacity:0.1%3Bfill:%23FFFFFF%3B%7D%3C/style%3E%3Ccircle class='st1' cx='5' cy='8' r='1'/%3E%3Ccircle class='st1' cx='38' cy='3' r='1'/%3E%3Ccircle class='st1' cx='12' cy='4' r='1'/%3E%3Ccircle class='st1' cx='16' cy='16' r='1'/%3E%3Ccircle class='st1' cx='47' cy='46' r='1'/%3E%3Ccircle class='st1' cx='32' cy='10' r='1'/%3E%3Ccircle class='st1' cx='3' cy='46' r='1'/%3E%3Ccircle class='st1' cx='45' cy='13' r='1'/%3E%3Ccircle class='st1' cx='10' cy='28' r='1'/%3E%3Ccircle class='st1' cx='22' cy='35' r='1'/%3E%3Ccircle class='st1' cx='3' cy='21' r='1'/%3E%3Ccircle class='st1' cx='26' cy='20' r='1'/%3E%3Ccircle class='st1' cx='30' cy='45' r='1'/%3E%3Ccircle class='st1' cx='15' cy='45' r='1'/%3E%3Ccircle class='st1' cx='34' cy='36' r='1'/%3E%3Ccircle class='st1' cx='41' cy='32' r='1'/%3E%3C/svg%3E");
+    background-position: 0px 0px;
+    animation: animatedBackground 10s linear infinite;
+}
+
+
+/*#############  Christmas NavBar for Mobile Device (written by Catherine)###########*/
+
+@media screen and (max-width: 690px) {
+
+    ul.christmas_border li:not(:nth-child(1)) {
+        display: none;
+    }
+
+    ul.christmas_border li.dropdown_icon {
+        display: block;
+        float: right;
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    ul.christmas_border.mobile .dropdown_icon {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    ul.christmas_border.mobile {
+        position: relative;
+        border: none;
+    }
+
+    ul.christmas_border.mobile li {
+        display: block;
+        float: none;
+    }
+
+    ul.christmas_border.mobile li a {
+        display: block;
+        text-align: left;
+    }
+}
+
+/*################## Christmas Products (template written by Phillip. These edits were written by Catherine) #####################*/
+
+.content-container-christmas {
+    position: relative;
+    margin-top: 80px !important;
+    margin-bottom: 50px !important;
+    padding-top: 50px !important;
+    background-color: #f6f6f6;
+    color: #92b09d;
+    border-radius: 10px;
+    border: none;
+}
+
+.content-container-christmas::before {
+    content: "";
+    position: absolute;
+    border-radius: 15px;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    z-index: -1;
+    background: repeating-linear-gradient(-45deg, #D6001C 0, #D6001C 10px, white 10px, white 20px, green 20px, green 30px, #D6001C 30px, #D6001C 40px);
+    animation: animate 15s linear infinite;
+}
+
+.christmas_google_font {
+    margin-top: 70px;
+    text-align: center;
+    color: white;
+    text-shadow: 3px 3px 2px skyblue;
+    font-family: 'Mountains of Christmas', serif;
+    font-size: 2em;
+}
+
+div.christmas_google_font h1 {
+    font-size: 2em;
+}
+
+/*##################### Christmas Footer (footer originally written by Phillip. These edits were written by Catherine) #####################*/
+
+.christmas_footer {
+    background-color: #f6f6f6;
+    color: #92b09d;
+    position: relative;
+    border: none;
+}
+
+.christmas_footer::before {
+    margin-top: auto;
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: 0px;
+    right: 0px;
+    bottom: 5px;
+    z-index: -1;
+    background: repeating-linear-gradient(-45deg, #D6001C 0, #D6001C 10px, white 10px, white 20px, green 20px, green 30px, #D6001C 30px, #D6001C 40px);
+    animation: animate 15s linear infinite;
+    font-family: 'Poppins', sans-serif;
+}
+
+/*****************************************************************************/
+/*#################### Contact Us Page (written by Philipp)################*/
+/*****************************************************************************/
+.content-container {
+    background-color: #f6f6f6;
+    color: #92b09d;
+    border-radius: 10px;
+    border: 0.5rem solid #92b09d;
+}
+
+.form-button {
+    background-color: #92b09d;
+    border: 1px solid #92b09d;
+}
+
+.form-button-disabled {
+    background-color: #b4c8bb56 !important;
+    border: 1px solid #b4c8bb56 !important;
+}
+
+.form-button:active {
+    background-color: #92b09d !important;
+    border: 1px solid #92b09d !important;
+}
+
+.form-button:hover {
+    background-color: #f6f6f6;
+    color: #92b09d;
+    border: 1px solid #92b09d;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+.invalid-input {
+    background-color: #FF7F7F;
+    border: 1px solid #ff0000;
+}
+
+#thank-you-message {
+    margin-top: 50px !important;
+    display: none;
+}
+
+/*****************************************************************************/
+/*#################### Delivery Page (written by Philipp)################*/
+/*****************************************************************************/
+.map-link {
+    text-decoration: none;
+    color: inherit;
+    font-weight: bold;
+}
+
+#map {
+    background-color: #f6f6f6;
+    color: #92b09d;
+    border-radius: 10px;
+    border: 0.5rem solid #92b09d;
+    padding: 0;
+    box-shadow: 10px 10px 5px #667B6D;
+    max-height: 800px;
+    width: auto;
+}
+
+
+/*****************************************************************************/
+/*#################### Gifts Page (written by Philipp)################*/
+/*****************************************************************************/
+.card {
+    color: #92b09d;
+}
+
+.card h3 {
+    font-family: 'Original Surfer', sans-serif;
+}
+
+/*****************************************************************************/
+/*#################### quiz page (written by Moses)################*/
+/*****************************************************************************/
+#quiz_body{
+    width: 500px;
+}
+@media screen and (max-width: 690px){
+    #quiz_body{
+        width: 350px;
+    }
+}
+#quiz_answers {
+    margin: auto 0;
+    width: 50%;
+    font-size: 22px;
+    text-align: left;
+}
+
+/*****************************************************************************/
+/*#################### about (written by Moses)################*/
+/*****************************************************************************/
+#about_us{
+    text-align: center;
+}
