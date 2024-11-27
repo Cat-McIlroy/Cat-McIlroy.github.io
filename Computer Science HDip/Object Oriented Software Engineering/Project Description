@@ -2,7 +2,8 @@ For this module I was required to design a Hotel Reservation System application.
 I was also required to develop all the classes required to implement one of the use cases of the application, using either Java or C++.
 I chose to develop the classes for the "Make Reservation" use case, and I chose to use Java for these.
 
-The project was split into two parts and required the following criteria:
+The project was split into two parts and the criteria are detailed below.
+I have included both parts of my written project here, along with the code I developed for the "Make Reservation" use case.
 
 Part 1:
 - Describe your system. Identify & describe the actors involved.
