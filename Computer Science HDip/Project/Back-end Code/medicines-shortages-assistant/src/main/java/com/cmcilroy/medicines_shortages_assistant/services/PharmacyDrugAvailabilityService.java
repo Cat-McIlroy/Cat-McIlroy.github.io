@@ -1,0 +1,8 @@
+package com.cmcilroy.medicines_shortages_assistant.services;
+
+import com.cmcilroy.medicines_shortages_assistant.domain.entities.PharmacyDrugAvailabilityEntity;
+
+public interface PharmacyDrugAvailabilityService {
+
+    PharmacyDrugAvailabilityEntity createPharmacyDrugAvailability(PharmacyDrugAvailabilityEntity pharmacyDrugAvailability);
+}
