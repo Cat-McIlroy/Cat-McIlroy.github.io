@@ -1,8 +1,5 @@
 package com.cmcilroy.medicines_shortages_assistant.domain.dto;
 
-import com.cmcilroy.medicines_shortages_assistant.domain.entities.DrugEntity;
-import com.cmcilroy.medicines_shortages_assistant.domain.entities.PharmacyEntity;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,9 +13,9 @@ public class PharmacyDrugAvailabilityDto {
 
     private Long id;
 
-    private PharmacyEntity pharmacy;
+    private PharmacyDto pharmacy;
 
-    private DrugEntity drug;
+    private DrugDto drug;
 
     private Boolean isAvailable;
 

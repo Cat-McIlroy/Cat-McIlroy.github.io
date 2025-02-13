@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class DrugDto {
     
-    private String licenceNum;
+    private String licenceNo;
 
     private String productName;
 

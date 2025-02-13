@@ -35,7 +35,7 @@ public class DrugRepositoryIntegrationTests {
         DrugEntity drug = TestData.createTestDrugA();
         underTest.save(drug);
         // use Optional so that it can be empty and doesn't just return null if no result
-        Optional<DrugEntity> result = underTest.findById(drug.getLicenceNum());
+        Optional<DrugEntity> result = underTest.findById(drug.getLicenceNo());
         // assert that a result has been returned
         assertThat(result).isPresent();
         // assert that the result is equal to the drug entity which was created
@@ -73,7 +73,7 @@ public class DrugRepositoryIntegrationTests {
         // save the updated drug to database
         underTest.save(drug);
         // use Optional so that it can be empty and doesn't just return null if no result
-        Optional<DrugEntity> result = underTest.findById(drug.getLicenceNum());
+        Optional<DrugEntity> result = underTest.findById(drug.getLicenceNo());
         // assert that the result is not empty, and that the result matches the updated drug
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(drug);
@@ -87,9 +87,9 @@ public class DrugRepositoryIntegrationTests {
         // save it to database
         underTest.save(drug);
         // delete by Id
-        underTest.deleteById(drug.getLicenceNum());
+        underTest.deleteById(drug.getLicenceNo());
         // use Optional so that it can be empty and doesn't just return null if no result
-        Optional<DrugEntity> result = underTest.findById(drug.getLicenceNum());
+        Optional<DrugEntity> result = underTest.findById(drug.getLicenceNo());
         // assert that the result is empty (i.e. the record could not be found)
         assertThat(result).isEmpty();
     }

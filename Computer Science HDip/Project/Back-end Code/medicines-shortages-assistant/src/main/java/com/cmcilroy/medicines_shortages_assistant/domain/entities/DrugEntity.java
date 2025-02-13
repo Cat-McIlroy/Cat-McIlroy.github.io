@@ -22,7 +22,7 @@ public class DrugEntity {
     // for the drugs table this is going to be the product licence number
     // use Column annotation to specify what the corresponding column name in the database should be
     @Column(name = "licence_no")
-    private String licenceNum;
+    private String licenceNo;
 
     @Column(name = "product_name")
     private String productName;

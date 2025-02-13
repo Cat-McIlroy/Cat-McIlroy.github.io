@@ -1,5 +1,12 @@
 package com.cmcilroy.medicines_shortages_assistant.services.impl;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import org.springframework.stereotype.Service;
 
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.DrugEntity;
@@ -18,9 +25,26 @@ public class DrugServiceImpl implements DrugService{
 
     // pass-through method. The Service layer is taking the Entity and passing it to the Repository which persists it in the database
     @Override
-    public DrugEntity createDrug(DrugEntity drug) {
+    public DrugEntity createDrug(String licenceNo, DrugEntity drug) {
+        // ensure the licenceNo associated with the drug object to be saved is the same as the licenceNo in the URL
+        drug.setLicenceNo(licenceNo);
         // save returns an Entity by default
         return drugRepository.save(drug);
     }
 
+    @Override
+    public List<DrugEntity> findAll() {
+        return StreamSupport
+        .stream(
+            drugRepository.findAll().spliterator(), 
+            false)
+        .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<DrugEntity> findOne(String licenceNo) {
+        return drugRepository.findById(licenceNo);
+    }
+
+    
 }
