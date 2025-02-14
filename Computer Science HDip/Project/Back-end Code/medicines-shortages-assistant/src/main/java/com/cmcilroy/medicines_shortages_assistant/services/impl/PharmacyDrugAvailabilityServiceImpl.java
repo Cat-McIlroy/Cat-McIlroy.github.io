@@ -23,7 +23,7 @@ public class PharmacyDrugAvailabilityServiceImpl implements PharmacyDrugAvailabi
 
     // pass-through method. The Service layer is taking the Entity and passing it to the Repository which persists it in the database
     @Override
-    public PharmacyDrugAvailabilityEntity createPharmacyDrugAvailability(PharmacyDrugAvailabilityEntity pharmacyDrugAvailability) {
+    public PharmacyDrugAvailabilityEntity savePharmacyDrugAvailability(PharmacyDrugAvailabilityEntity pharmacyDrugAvailability) {
         // save returns an Entity by default
         return pharmacyDrugAvailabilityRepository.save(pharmacyDrugAvailability);
     }
@@ -41,6 +41,11 @@ public class PharmacyDrugAvailabilityServiceImpl implements PharmacyDrugAvailabi
     @Override
     public Optional<PharmacyDrugAvailabilityEntity> findOne(Long id) {
         return pharmacyDrugAvailabilityRepository.findById(id);
+    }
+
+    @Override
+    public boolean isPresent(Long id) {
+        return pharmacyDrugAvailabilityRepository.existsById(id);
     }
 
 }

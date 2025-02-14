@@ -1,7 +1,5 @@
 package com.cmcilroy.medicines_shortages_assistant.services.impl;
 
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,7 +23,7 @@ public class DrugServiceImpl implements DrugService{
 
     // pass-through method. The Service layer is taking the Entity and passing it to the Repository which persists it in the database
     @Override
-    public DrugEntity createDrug(String licenceNo, DrugEntity drug) {
+    public DrugEntity saveDrug(String licenceNo, DrugEntity drug) {
         // ensure the licenceNo associated with the drug object to be saved is the same as the licenceNo in the URL
         drug.setLicenceNo(licenceNo);
         // save returns an Entity by default
@@ -44,6 +42,11 @@ public class DrugServiceImpl implements DrugService{
     @Override
     public Optional<DrugEntity> findOne(String licenceNo) {
         return drugRepository.findById(licenceNo);
+    }
+
+    @Override
+    public boolean isPresent(String licenceNo) {
+        return drugRepository.existsById(licenceNo);
     }
 
     

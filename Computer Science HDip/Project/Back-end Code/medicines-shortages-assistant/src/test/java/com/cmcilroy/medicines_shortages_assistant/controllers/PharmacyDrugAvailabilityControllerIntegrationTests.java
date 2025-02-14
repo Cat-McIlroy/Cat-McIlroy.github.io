@@ -13,7 +13,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.cmcilroy.medicines_shortages_assistant.TestData;
+import com.cmcilroy.medicines_shortages_assistant.domain.dto.DrugDto;
 import com.cmcilroy.medicines_shortages_assistant.domain.dto.PharmacyDrugAvailabilityDto;
+import com.cmcilroy.medicines_shortages_assistant.domain.dto.PharmacyDto;
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.DrugEntity;
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.PharmacyDrugAvailabilityEntity;
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.PharmacyEntity;
@@ -54,6 +56,8 @@ public class PharmacyDrugAvailabilityControllerIntegrationTests {
         this.drugService = drugService;
     }
 
+///////////////////////////////////////////////////////// CREATE METHOD TESTS ///////////////////////////////////////////////////////////
+
     // test to check that createPharmacyDrugAvailability method returns a HTTP 201 Created code
     @Test
     public void testThatCreatePharmacyDrugAvailabilityReturnsHttp201Created() throws Exception {
@@ -88,6 +92,8 @@ public class PharmacyDrugAvailabilityControllerIntegrationTests {
         );
     }
 
+///////////////////////////////////////////////////// FIND METHODS TESTS //////////////////////////////////////////////////////////
+
     // test to check that listAllPharmacyDrugAvailabilities method returns a HTTP 200 Ok code
     @Test
     public void testThatListAllPharmacyDrugAvailabilitiesReturnsHttp200() throws Exception {
@@ -104,13 +110,13 @@ public class PharmacyDrugAvailabilityControllerIntegrationTests {
     public void testThatListAllPharmacyDrugAvailabilitiesReturnsListOfAvailabilities() throws Exception {
         PharmacyEntity pharmacy = TestData.createTestPharmacyA();
         // persist Pharmacy entity in the test database
-        pharmacyService.createPharmacy(pharmacy.getPsiRegNo(), pharmacy);
+        pharmacyService.savePharmacy(pharmacy.getPsiRegNo(), pharmacy);
         DrugEntity drug = TestData.createTestDrugA();
         // persist Drug entity in the test database
-        drugService.createDrug(drug.getLicenceNo(), drug);
+        drugService.saveDrug(drug.getLicenceNo(), drug);
         PharmacyDrugAvailabilityEntity pharmacyDrugAvailability = TestData.createTestPharmacyDrugAvailabilityA(pharmacy, drug);
         // save the new PharmacyDrugAvailability entity in the test database
-        pharmacyDrugAvailabilityService.createPharmacyDrugAvailability(pharmacyDrugAvailability);
+        pharmacyDrugAvailabilityService.savePharmacyDrugAvailability(pharmacyDrugAvailability);
         // MockMvc Expects
         mockMvc.perform(
             MockMvcRequestBuilders.get("/pharmacy-drug-availabilities")
@@ -129,13 +135,13 @@ public class PharmacyDrugAvailabilityControllerIntegrationTests {
     public void testThatGetPharmacyDrugAvailabilityReturnsHttp200WhenRecordExists() throws Exception {
         PharmacyEntity pharmacy = TestData.createTestPharmacyA();
         // persist Pharmacy entity in the test database
-        pharmacyService.createPharmacy(pharmacy.getPsiRegNo(), pharmacy);
+        pharmacyService.savePharmacy(pharmacy.getPsiRegNo(), pharmacy);
         DrugEntity drug = TestData.createTestDrugA();
         // persist Drug entity in the test database
-        drugService.createDrug(drug.getLicenceNo(), drug);
+        drugService.saveDrug(drug.getLicenceNo(), drug);
         PharmacyDrugAvailabilityEntity pharmacyDrugAvailability = TestData.createTestPharmacyDrugAvailabilityA(pharmacy, drug);
         // save the new PharmacyDrugAvailability entity in the test database
-        pharmacyDrugAvailabilityService.createPharmacyDrugAvailability(pharmacyDrugAvailability);
+        pharmacyDrugAvailabilityService.savePharmacyDrugAvailability(pharmacyDrugAvailability);
         mockMvc.perform(
             MockMvcRequestBuilders.get("/pharmacy-drug-availabilities/" + pharmacyDrugAvailability.getId())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -160,13 +166,13 @@ public class PharmacyDrugAvailabilityControllerIntegrationTests {
     public void testThatGetPharmacyDrugAvailabilityReturnsCorrectRecordWhenRecordExists() throws Exception {
         PharmacyEntity pharmacy = TestData.createTestPharmacyA();
         // persist Pharmacy entity in the test database
-        pharmacyService.createPharmacy(pharmacy.getPsiRegNo(), pharmacy);
+        pharmacyService.savePharmacy(pharmacy.getPsiRegNo(), pharmacy);
         DrugEntity drug = TestData.createTestDrugA();
         // persist Drug entity in the test database
-        drugService.createDrug(drug.getLicenceNo(), drug);
+        drugService.saveDrug(drug.getLicenceNo(), drug);
         PharmacyDrugAvailabilityEntity pharmacyDrugAvailability = TestData.createTestPharmacyDrugAvailabilityA(pharmacy, drug);
         // save the new PharmacyDrugAvailability entity in the test database
-        pharmacyDrugAvailabilityService.createPharmacyDrugAvailability(pharmacyDrugAvailability);
+        pharmacyDrugAvailabilityService.savePharmacyDrugAvailability(pharmacyDrugAvailability);
         mockMvc.perform(
             MockMvcRequestBuilders.get("/pharmacy-drug-availabilities/" + pharmacyDrugAvailability.getId())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -176,6 +182,91 @@ public class PharmacyDrugAvailabilityControllerIntegrationTests {
             MockMvcResultMatchers.jsonPath("$.drug").value(drug)
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.isAvailable").value(true)
+        );
+    }
+
+////////////////////////////////////////////////////// UPDATE METHOD TESTS //////////////////////////////////////////////////////////
+
+    // test to check that fullUpdatePharmacyDrugAvailability method returns a HTTP 404 Not Found code when record doesn't exist
+    @Test
+    public void testThatFullUpdatePharmacyDrugAvailabilityReturnsHttp404WhenNoRecordExists() throws Exception {
+        PharmacyDto pharmacy = TestData.createTestPharmacyDtoA();
+        DrugDto drug = TestData.createTestDrugDtoA();
+        PharmacyDrugAvailabilityDto pharmacyDrugAvailability = TestData.createTestPharmacyDrugAvailabilityDtoA(pharmacy, drug);
+        String pharmacyDrugAvailabilityJson = objectMapper.writeValueAsString(pharmacyDrugAvailability);
+        mockMvc.perform(
+            MockMvcRequestBuilders.put("/pharmacy-drug-availabilities/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(pharmacyDrugAvailabilityJson)
+        ).andExpect(
+            MockMvcResultMatchers.status().isNotFound()
+        );
+    }
+
+    // test to check that fullUpdatePharmacyDrugAvailability method returns a HTTP 200 Ok code when record exists
+    @Test
+    public void testThatFullUpdatePharmacyDrugAvailabilityReturnsHttp200WhenRecordExists() throws Exception {
+        PharmacyEntity pharmacyEntity = TestData.createTestPharmacyA();
+        // persist Pharmacy entity in the test database
+        pharmacyService.savePharmacy(pharmacyEntity.getPsiRegNo(), pharmacyEntity);
+        DrugEntity drugEntity = TestData.createTestDrugA();
+        // persist Drug entity in the test database
+        drugService.saveDrug(drugEntity.getLicenceNo(), drugEntity);
+        PharmacyDrugAvailabilityEntity pharmacyDrugAvailabilityEntity = TestData.createTestPharmacyDrugAvailabilityA(pharmacyEntity, drugEntity);
+        // save the new PharmacyDrugAvailability entity in the test database
+        PharmacyDrugAvailabilityEntity savedPharmacyDrugAvailabilityEntity = 
+        pharmacyDrugAvailabilityService.savePharmacyDrugAvailability(pharmacyDrugAvailabilityEntity);
+
+        PharmacyDto pharmacyDto = TestData.createTestPharmacyDtoA();
+        DrugDto drugDto = TestData.createTestDrugDtoA();
+        PharmacyDrugAvailabilityDto pharmacyDrugAvailabilityDto = TestData.createTestPharmacyDrugAvailabilityDtoA(pharmacyDto, drugDto);
+
+        String pharmacyDrugAvailabilityJson = objectMapper.writeValueAsString(pharmacyDrugAvailabilityDto);
+        mockMvc.perform(
+            MockMvcRequestBuilders.put("/pharmacy-drug-availabilities/" + savedPharmacyDrugAvailabilityEntity.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(pharmacyDrugAvailabilityJson)
+        ).andExpect(
+            MockMvcResultMatchers.status().isOk()
+        );
+    }
+
+    // test to check that fullUpdatePharmacyDrugAvailability correctly updates existing record
+    @Test
+    public void testThatFullUpdatePharmacyDrugAvailabilityUpdatesExistingRecord() throws Exception {
+        PharmacyEntity pharmacyEntityA = TestData.createTestPharmacyA();
+        PharmacyEntity pharmacyEntityB = TestData.createTestPharmacyB();
+        // persist Pharmacy entities in the test database
+        pharmacyService.savePharmacy(pharmacyEntityA.getPsiRegNo(), pharmacyEntityA);
+        pharmacyService.savePharmacy(pharmacyEntityB.getPsiRegNo(), pharmacyEntityB);
+        DrugEntity drugEntityA = TestData.createTestDrugA();
+        DrugEntity drugEntityB = TestData.createTestDrugB();
+        // persist Drug entities in the test database
+        drugService.saveDrug(drugEntityA.getLicenceNo(), drugEntityA);
+        drugService.saveDrug(drugEntityB.getLicenceNo(), drugEntityB);
+        PharmacyDrugAvailabilityEntity pharmacyDrugAvailabilityEntity = TestData.createTestPharmacyDrugAvailabilityA(pharmacyEntityA, drugEntityA);
+        // save the new PharmacyDrugAvailability entity in the test database
+        PharmacyDrugAvailabilityEntity savedPharmacyDrugAvailabilityEntity = 
+        pharmacyDrugAvailabilityService.savePharmacyDrugAvailability(pharmacyDrugAvailabilityEntity);
+
+        PharmacyDto pharmacyDto = TestData.createTestPharmacyDtoB();
+        DrugDto drugDto = TestData.createTestDrugDtoB();
+        PharmacyDrugAvailabilityDto pharmacyDrugAvailabilityDto = TestData.createTestPharmacyDrugAvailabilityDtoB(pharmacyDto, drugDto);
+        // make sure id of Dto matches the id of the existing entity to be updated 
+        pharmacyDrugAvailabilityDto.setId(savedPharmacyDrugAvailabilityEntity.getId());
+
+        String pharmacyDrugAvailabilityDtoUpdateJson = objectMapper.writeValueAsString(pharmacyDrugAvailabilityDto);
+        mockMvc.perform(
+            MockMvcRequestBuilders.put("/pharmacy-drug-availabilities/" + savedPharmacyDrugAvailabilityEntity.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(pharmacyDrugAvailabilityDtoUpdateJson)
+        // expect properties to match those of pharmacyDrugAvailabilityDto as this was the update
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.pharmacy").value(pharmacyDrugAvailabilityDto.getPharmacy())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.drug").value(pharmacyDrugAvailabilityDto.getDrug())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.isAvailable").value(pharmacyDrugAvailabilityDto.getIsAvailable())
         );
     }
 }

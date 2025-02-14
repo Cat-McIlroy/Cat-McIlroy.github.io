@@ -18,8 +18,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.cmcilroy.medicines_shortages_assistant.TestData;
 import com.cmcilroy.medicines_shortages_assistant.domain.dto.DrugDto;
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.DrugEntity;
-import com.cmcilroy.medicines_shortages_assistant.domain.entities.PharmacyDrugAvailabilityEntity;
-import com.cmcilroy.medicines_shortages_assistant.domain.entities.PharmacyEntity;
 import com.cmcilroy.medicines_shortages_assistant.services.DrugService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -45,29 +43,49 @@ public class DrugControllerIntegrationTests {
         this.drugService = drugService;
     }
 
-    // test to check that createDrug method returns a HTTP 201 Created code
+///////////////////////////////////////////////// CREATE & UPDATE METHOD TESTS ///////////////////////////////////////////////////////
+
+    // test to check that createUpdateDrug method returns a HTTP 201 Created code on creating new record
     @Test
     public void testThatCreateDrugReturnsHttp201Created() throws Exception{
         DrugDto drug = TestData.createTestDrugDtoA();
-        String createDrugJson = objectMapper.writeValueAsString(drug);
+        String drugJson = objectMapper.writeValueAsString(drug);
         mockMvc.perform(
         MockMvcRequestBuilders.put("/drugs/" + URLEncoder.encode(drug.getLicenceNo(), StandardCharsets.UTF_8))
             .contentType(MediaType.APPLICATION_JSON)
-            .content(createDrugJson)
+            .content(drugJson)
         ).andExpect(
             MockMvcResultMatchers.status().isCreated()
         );
     }
 
-    // test to check that createDrug method returns expected saved drug
+    // test to check that createUpdateDrug method returns a HTTP 200 Ok code on updating existing record
     @Test
-    public void testThatCreateDrugReturnsSavedDrug() throws Exception{
+    public void testThatUpdateDrugReturnsHttp200Ok() throws Exception{
+        DrugEntity drugEntity = TestData.createTestDrugA();
+        DrugEntity savedDrugEntity = drugService.saveDrug(drugEntity.getLicenceNo(), drugEntity);
+        DrugDto drugDto = TestData.createTestDrugDtoA();
+        // make sure licence numbers of savedDrugEntity and drugDto match 
+        drugDto.setLicenceNo(savedDrugEntity.getLicenceNo());
+        String drugJson = objectMapper.writeValueAsString(drugDto);
+        mockMvc.perform(
+        MockMvcRequestBuilders.put("/drugs/" + URLEncoder.encode(drugDto.getLicenceNo(), StandardCharsets.UTF_8))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(drugJson)
+        ).andExpect(
+            MockMvcResultMatchers.status().isOk()
+        );
+    }
+
+    // test to check that createUpdateDrug method returns expected created drug
+    @Test
+    public void testThatCreateDrugReturnsCreatedDrug() throws Exception{
         DrugDto drug = TestData.createTestDrugDtoA();
-        String createDrugJson = objectMapper.writeValueAsString(drug);
+        String drugJson = objectMapper.writeValueAsString(drug);
         mockMvc.perform(
         MockMvcRequestBuilders.put("/drugs/" + URLEncoder.encode(drug.getLicenceNo(), StandardCharsets.UTF_8))
             .contentType(MediaType.APPLICATION_JSON)
-            .content(createDrugJson)
+            .content(drugJson)
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.licenceNo").value(drug.getLicenceNo())
         ).andExpect(
@@ -80,6 +98,36 @@ public class DrugControllerIntegrationTests {
             MockMvcResultMatchers.jsonPath("$.isAvailable").value(drug.getIsAvailable())
         );
     }
+
+    // test to check that createUpdateDrug method returns expected updated drug
+    @Test
+    public void testThatUpdateDrugReturnsUpdatedDrug() throws Exception{
+        DrugEntity drugEntity = TestData.createTestDrugA();
+        DrugEntity savedDrugEntity = drugService.saveDrug(drugEntity.getLicenceNo(), drugEntity);
+        DrugDto drugDto = TestData.createTestDrugDtoA();
+        // make sure licence numbers of savedDrugEntity and drugDto match 
+        drugDto.setLicenceNo(savedDrugEntity.getLicenceNo());
+        // change product name property, to test update functionality
+        drugDto.setProductName("UPDATED PRODUCT NAME");
+        String drugJson = objectMapper.writeValueAsString(drugDto);
+        mockMvc.perform(
+        MockMvcRequestBuilders.put("/drugs/" + URLEncoder.encode(drugDto.getLicenceNo(), StandardCharsets.UTF_8))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(drugJson)
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.licenceNo").value(drugDto.getLicenceNo())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.productName").value(drugDto.getProductName())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.strength").value(drugDto.getStrength())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.activeSubstance").value(drugDto.getActiveSubstance())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.isAvailable").value(drugDto.getIsAvailable())
+        );
+    }
+
+//////////////////////////////////////////////////////// FIND METHODS TESTS //////////////////////////////////////////////////////////////////
 
     // test to check that listAllDrugs method returns a HTTP 200 Ok code
     @Test
@@ -96,7 +144,7 @@ public class DrugControllerIntegrationTests {
     @Test
     public void testThatListAllDrugsReturnsDrug() throws Exception{
         DrugEntity drug = TestData.createTestDrugA();
-        drugService.createDrug(drug.getLicenceNo(),drug);
+        drugService.saveDrug(drug.getLicenceNo(),drug);
         mockMvc.perform(
         MockMvcRequestBuilders.get("/drugs")
             .contentType(MediaType.APPLICATION_JSON)
@@ -118,7 +166,7 @@ public class DrugControllerIntegrationTests {
     public void testThatGetDrugReturnsHttp200WhenRecordExists() throws Exception {
         DrugEntity drug = TestData.createTestDrugA();
         // persist Drug entity in the test database
-        drugService.createDrug(drug.getLicenceNo(), drug);
+        drugService.saveDrug(drug.getLicenceNo(), drug);
         mockMvc.perform(
             MockMvcRequestBuilders.get("/drugs/" + URLEncoder.encode(drug.getLicenceNo(), StandardCharsets.UTF_8))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -143,7 +191,7 @@ public class DrugControllerIntegrationTests {
     public void testThatGetDrugReturnsCorrectRecordWhenRecordExists() throws Exception {
         DrugEntity drug = TestData.createTestDrugA();
         // persist Drug entity in the test database
-        drugService.createDrug(drug.getLicenceNo(), drug);
+        drugService.saveDrug(drug.getLicenceNo(), drug);
         mockMvc.perform(
             MockMvcRequestBuilders.get("/drugs/" + URLEncoder.encode(drug.getLicenceNo(), StandardCharsets.UTF_8))
                 .contentType(MediaType.APPLICATION_JSON)

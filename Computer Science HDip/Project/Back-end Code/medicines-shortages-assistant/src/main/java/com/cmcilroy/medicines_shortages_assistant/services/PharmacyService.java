@@ -7,9 +7,12 @@ import com.cmcilroy.medicines_shortages_assistant.domain.entities.PharmacyEntity
 
 public interface PharmacyService {
 
-    PharmacyEntity createPharmacy(Integer psiRegNo, PharmacyEntity pharmacy);
+    PharmacyEntity savePharmacy(Integer psiRegNo, PharmacyEntity pharmacy);
 
     List<PharmacyEntity> findAll();
 
     Optional<PharmacyEntity> findOne(Integer psiRegNo);
+
+    boolean isPresent(Integer psiRegNo);
+
 }

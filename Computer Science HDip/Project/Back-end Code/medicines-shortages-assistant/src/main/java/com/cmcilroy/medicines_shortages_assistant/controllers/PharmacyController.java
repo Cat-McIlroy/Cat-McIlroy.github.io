@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cmcilroy.medicines_shortages_assistant.domain.dto.PharmacyDrugAvailabilityDto;
 import com.cmcilroy.medicines_shortages_assistant.domain.dto.PharmacyDto;
-import com.cmcilroy.medicines_shortages_assistant.domain.entities.PharmacyDrugAvailabilityEntity;
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.PharmacyEntity;
 import com.cmcilroy.medicines_shortages_assistant.mappers.Mapper;
 import com.cmcilroy.medicines_shortages_assistant.services.PharmacyService;
@@ -35,12 +33,26 @@ public class PharmacyController {
     // using PUT rather than POST because I am providing the Id (psiRegNo)
     @PutMapping(path = "/pharmacies/{psiRegNo}")
     // RequestBodyAnnotation tells Spring to look at the HTTP request body for the PharmacyDto object represented as JSON and convert to Java
-    public ResponseEntity<PharmacyDto> createPharmacy(
+    public ResponseEntity<PharmacyDto> createUpdatePharmacy(
     @PathVariable("psiRegNo") Integer psiRegNo,
     @RequestBody PharmacyDto pharmacyDto) {
+        // map Dto to Entity
         PharmacyEntity pharmacyEntity = pharmacyMapper.mapFrom(pharmacyDto);
-        PharmacyEntity savedPharmacyEntity = pharmacyService.createPharmacy(psiRegNo, pharmacyEntity);
-        return new ResponseEntity<>(pharmacyMapper.mapTo(savedPharmacyEntity), HttpStatus.CREATED);
+        // check if pharmacy already exists in the database
+        boolean pharmacyExists = pharmacyService.isPresent(psiRegNo);
+        // save the Entity in the database
+        PharmacyEntity savedPharmacyEntity = pharmacyService.savePharmacy(psiRegNo, pharmacyEntity);
+        // map the Entity back to Dto
+        PharmacyDto savedPharmacyDto = pharmacyMapper.mapTo(savedPharmacyEntity);
+        // return the relevant HTTP status code
+        if(pharmacyExists){
+            // update existing record
+            return new ResponseEntity<>(savedPharmacyDto, HttpStatus.OK);
+        }
+        else{
+            // create new record
+            return new ResponseEntity<>(savedPharmacyDto, HttpStatus.CREATED);
+        }
     }
 
     // GET method to return list of all pharmacies contained in the database

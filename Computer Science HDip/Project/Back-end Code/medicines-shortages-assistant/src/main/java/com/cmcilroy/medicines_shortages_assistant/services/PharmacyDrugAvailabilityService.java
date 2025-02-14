@@ -7,9 +7,11 @@ import com.cmcilroy.medicines_shortages_assistant.domain.entities.PharmacyDrugAv
 
 public interface PharmacyDrugAvailabilityService {
 
-    PharmacyDrugAvailabilityEntity createPharmacyDrugAvailability(PharmacyDrugAvailabilityEntity pharmacyDrugAvailability);
+    PharmacyDrugAvailabilityEntity savePharmacyDrugAvailability(PharmacyDrugAvailabilityEntity pharmacyDrugAvailability);
 
     List<PharmacyDrugAvailabilityEntity> findAll();
 
     Optional<PharmacyDrugAvailabilityEntity> findOne(Long id);
+
+    boolean isPresent(Long id);
 }

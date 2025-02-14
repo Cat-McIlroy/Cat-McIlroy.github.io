@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cmcilroy.medicines_shortages_assistant.domain.dto.DrugDto;
-import com.cmcilroy.medicines_shortages_assistant.domain.dto.PharmacyDto;
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.DrugEntity;
-import com.cmcilroy.medicines_shortages_assistant.domain.entities.PharmacyEntity;
 import com.cmcilroy.medicines_shortages_assistant.mappers.Mapper;
 import com.cmcilroy.medicines_shortages_assistant.services.DrugService;
 
@@ -37,13 +35,28 @@ public class DrugController {
     // using PUT rather than POST because I am providing the Id (licenceNo)
     @PutMapping(path = "/drugs/{licenceNo}")
     // RequestBodyAnnotation tells Spring to look at the HTTP request body for the DrugDto object represented as JSON and convert to Java
-    public ResponseEntity<DrugDto> createDrug(
+    public ResponseEntity<DrugDto> createUpdateDrug(
     @PathVariable("licenceNo") String licenceNo,
     @RequestBody DrugDto drugDto) {
+        // decode licence no from URL format
         String decodedLicenceNo = URLDecoder.decode(licenceNo, StandardCharsets.UTF_8);
+        // map Dto to Entity
         DrugEntity drugEntity = drugMapper.mapFrom(drugDto);
-        DrugEntity savedDrugEntity = drugService.createDrug(decodedLicenceNo, drugEntity);
-        return new ResponseEntity<>(drugMapper.mapTo(savedDrugEntity), HttpStatus.CREATED);
+        // check if drug already exists in the database
+        boolean drugExists = drugService.isPresent(decodedLicenceNo);
+        // save the Entity in the database
+        DrugEntity savedDrugEntity = drugService.saveDrug(decodedLicenceNo, drugEntity);
+        // map the entity back to a Dto
+        DrugDto savedDrugDto = drugMapper.mapTo(savedDrugEntity);
+        // return the relevant HTTP status code
+        if(drugExists){
+            // update existing record
+            return new ResponseEntity<>(savedDrugDto, HttpStatus.OK);
+        }
+        else{
+            // create new record
+            return new ResponseEntity<>(savedDrugDto, HttpStatus.CREATED);
+        }
     }
 
     // GET method to return list of all drugs contained in the database

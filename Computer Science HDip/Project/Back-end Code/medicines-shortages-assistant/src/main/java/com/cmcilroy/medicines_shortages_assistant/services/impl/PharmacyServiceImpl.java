@@ -23,7 +23,7 @@ public class PharmacyServiceImpl implements PharmacyService{
 
     // pass-through method. The Service layer is taking the Entity and passing it to the Repository which persists it in the database
     @Override
-    public PharmacyEntity createPharmacy(Integer psiRegNo, PharmacyEntity pharmacy) {
+    public PharmacyEntity savePharmacy(Integer psiRegNo, PharmacyEntity pharmacy) {
         // ensure the psiRegNo associated with the pharmacy object to be saved is the same as the psiRegNo in the URL
         pharmacy.setPsiRegNo(psiRegNo);
         // save returns an Entity by default
@@ -42,6 +42,11 @@ public class PharmacyServiceImpl implements PharmacyService{
     @Override
     public Optional<PharmacyEntity> findOne(Integer psiRegNo) {
         return pharmacyRepository.findById(psiRegNo);
+    }
+
+    @Override
+    public boolean isPresent(Integer psiRegNo) {
+        return pharmacyRepository.existsById(psiRegNo);
     }
 
 }
