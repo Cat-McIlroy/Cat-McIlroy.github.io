@@ -1,17 +1,17 @@
 package com.cmcilroy.medicines_shortages_assistant.controllers;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.cmcilroy.medicines_shortages_assistant.domain.dto.PharmacyDto;
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.PharmacyEntity;
 import com.cmcilroy.medicines_shortages_assistant.mappers.Mapper;
@@ -55,13 +55,33 @@ public class PharmacyController {
         }
     }
 
-    // GET method to return list of all pharmacies contained in the database
+    // PATCH method to partially update a pharmacy contained in the database
+    @PatchMapping(path = "/pharmacies/{psiRegNo}")
+    // RequestBodyAnnotation tells Spring to look at the HTTP request body for the DrugDto object represented as JSON and convert to Java
+    public ResponseEntity<PharmacyDto> partialUpdatePharmacy(
+    @PathVariable("psiRegNo") Integer psiRegNo,
+    @RequestBody PharmacyDto pharmacyDto) {
+        // check if pharmacy exists in the database
+        if(!pharmacyService.isPresent(psiRegNo)){
+            // if it doesn't exist return HTTP 404 Not Found, cannot partially update a non-existent record
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        else{
+            // map Dto to Entity
+            PharmacyEntity pharmacyEntity = pharmacyMapper.mapFrom(pharmacyDto);
+            // save the Entity in the database
+            PharmacyEntity updatedPharmacyEntity = pharmacyService.partialUpdate(psiRegNo, pharmacyEntity);
+            // map the entity back to a Dto
+            PharmacyDto updatedPharmacyDto = pharmacyMapper.mapTo(updatedPharmacyEntity);
+            return new ResponseEntity<>(updatedPharmacyDto, HttpStatus.OK);
+        }
+    }
+
+    // GET method to return a paginated list of all pharmacies contained in the database
     @GetMapping(path = "/pharmacies")
-    public List<PharmacyDto> listAllPharmacies() {
-        List<PharmacyEntity> pharmacies = pharmacyService.findAll();
-        return pharmacies.stream()
-        .map(pharmacyMapper::mapTo)
-        .collect(Collectors.toList());
+    public Page<PharmacyDto> listAllPharmacies(Pageable pageable) {
+        Page<PharmacyEntity> pharmacies = pharmacyService.findAll(pageable);
+        return pharmacies.map(pharmacyMapper::mapTo);
     }
 
     // GET method to return pharmacy by psiRegNo
@@ -76,5 +96,12 @@ public class PharmacyController {
         else{
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    // DELETE method to delete a specific pharmacy from the database
+    @DeleteMapping(path = "/pharmacies/{psiRegNo}")
+    public ResponseEntity<Void> deletePharmacy(@PathVariable("psiRegNo") Integer psiRegNo) {
+        pharmacyService.delete(psiRegNo);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

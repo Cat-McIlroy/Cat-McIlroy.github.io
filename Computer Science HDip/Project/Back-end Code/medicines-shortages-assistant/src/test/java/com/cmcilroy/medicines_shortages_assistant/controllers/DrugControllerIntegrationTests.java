@@ -2,7 +2,6 @@ package com.cmcilroy.medicines_shortages_assistant.controllers;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
 import com.cmcilroy.medicines_shortages_assistant.TestData;
 import com.cmcilroy.medicines_shortages_assistant.domain.dto.DrugDto;
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.DrugEntity;
@@ -127,6 +125,68 @@ public class DrugControllerIntegrationTests {
         );
     }
 
+//////////////////////////////////////////////////////// PARTIAL UPDATE METHOD TESTS /////////////////////////////////////////////////////////
+
+    // test to check that partialUpdateDrug method returns a HTTP 404 Not Found code when record doesn't exist
+    @Test
+    public void testThatPartialUpdateDrugReturnsHttp404WhenNoRecordExists() throws Exception {
+        DrugDto drug = TestData.createTestDrugDtoA();
+        // no entity saved in database here, so the record should not exist, and a HTTP 404 should be returned
+        String drugJson = objectMapper.writeValueAsString(drug);
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.patch("/drugs/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(drugJson)
+        ).andExpect(
+            MockMvcResultMatchers.status().isNotFound()
+        );
+    }
+
+    // test to check that partialUpdateDrug method returns a HTTP 200 Ok code on updating existing record
+    @Test
+    public void testThatPartialUpdateDrugReturnsHttp200Ok() throws Exception{
+        DrugEntity drugEntity = TestData.createTestDrugA();
+        drugService.saveDrug(drugEntity.getLicenceNo(), drugEntity);
+        DrugDto drugDto = TestData.createTestDrugDtoA();
+        // update product name of Dto to be passed in
+        drugDto.setProductName("UPDATED");
+        String drugJson = objectMapper.writeValueAsString(drugDto);
+        mockMvc.perform(
+            MockMvcRequestBuilders.patch("/drugs/" + URLEncoder.encode(drugEntity.getLicenceNo(), StandardCharsets.UTF_8))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(drugJson)
+        ).andExpect(
+            MockMvcResultMatchers.status().isOk()
+        );
+    }
+
+    // test to check that partialUpdateDrug method returns expected updated drug
+    @Test
+    public void testThatPartialUpdateDrugReturnsUpdatedRecord() throws Exception{
+        DrugEntity drugEntity = TestData.createTestDrugA();
+        drugService.saveDrug(drugEntity.getLicenceNo(), drugEntity);
+        DrugDto drugDto = TestData.createTestDrugDtoA();
+        // update product name of Dto to be passed in
+        drugDto.setProductName("UPDATED");
+        String drugJson = objectMapper.writeValueAsString(drugDto);
+        mockMvc.perform(
+            MockMvcRequestBuilders.patch("/drugs/" + URLEncoder.encode(drugEntity.getLicenceNo(), StandardCharsets.UTF_8))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(drugJson)
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.licenceNo").value(drugDto.getLicenceNo())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.productName").value("UPDATED")
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.strength").value(drugDto.getStrength())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.activeSubstance").value(drugDto.getActiveSubstance())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.isAvailable").value(drugDto.getIsAvailable())
+        );
+    }
+
 //////////////////////////////////////////////////////// FIND METHODS TESTS //////////////////////////////////////////////////////////////////
 
     // test to check that listAllDrugs method returns a HTTP 200 Ok code
@@ -149,15 +209,15 @@ public class DrugControllerIntegrationTests {
         MockMvcRequestBuilders.get("/drugs")
             .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$[0].licenceNo").value("PA0749/067/001")
+            MockMvcResultMatchers.jsonPath("$.content[0].licenceNo").value("PA0749/067/001")
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$[0].productName").value("Amlodipine Teva 5 mg Tablets")
+            MockMvcResultMatchers.jsonPath("$.content[0].productName").value("Amlodipine Teva 5 mg Tablets")
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$[0].strength").value("5 mg")
+            MockMvcResultMatchers.jsonPath("$.content[0].strength").value("5 mg")
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$[0].activeSubstance").value("Amlodipine")
+            MockMvcResultMatchers.jsonPath("$.content[0].activeSubstance").value("Amlodipine")
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$[0].isAvailable").value(true)
+            MockMvcResultMatchers.jsonPath("$.content[0].isAvailable").value(true)
         );
     }
 
@@ -205,6 +265,33 @@ public class DrugControllerIntegrationTests {
             MockMvcResultMatchers.jsonPath("$.activeSubstance").value("Amlodipine")
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.isAvailable").value(true)
+        );
+    }
+
+//////////////////////////////////////////////////////// DELETE METHOD TESTS /////////////////////////////////////////////////////////
+
+    // test to check that deleteDrug method returns a HTTP 204 No Content code when non-existent record is deleted
+    @Test
+    public void testThatDeleteNonExistentDrugReturnsHttp204() throws Exception {
+        mockMvc.perform(
+            MockMvcRequestBuilders.delete("/drugs/nonExistentLicenceNumber")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+            MockMvcResultMatchers.status().isNoContent()
+        );
+    }
+
+    // test to check that deleteDrug method returns a HTTP 204 No Content code when existing record is deleted
+    @Test
+    public void testThatDeleteExistingDrugReturnsHttp204() throws Exception {
+        DrugEntity drug = TestData.createTestDrugA();
+        // persist Drug entity in the test database
+        drugService.saveDrug(drug.getLicenceNo(), drug);
+        mockMvc.perform(
+            MockMvcRequestBuilders.delete("/drugs/" + URLEncoder.encode(drug.getLicenceNo(), StandardCharsets.UTF_8))
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+            MockMvcResultMatchers.status().isNoContent()
         );
     }
 }

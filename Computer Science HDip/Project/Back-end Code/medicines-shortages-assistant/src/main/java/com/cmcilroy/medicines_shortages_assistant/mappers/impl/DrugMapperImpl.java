@@ -2,7 +2,6 @@ package com.cmcilroy.medicines_shortages_assistant.mappers.impl;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
-
 import com.cmcilroy.medicines_shortages_assistant.domain.dto.DrugDto;
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.DrugEntity;
 import com.cmcilroy.medicines_shortages_assistant.mappers.Mapper;

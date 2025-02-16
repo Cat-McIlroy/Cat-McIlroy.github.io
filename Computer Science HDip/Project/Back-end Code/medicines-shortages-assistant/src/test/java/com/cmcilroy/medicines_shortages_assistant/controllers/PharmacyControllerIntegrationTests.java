@@ -1,7 +1,6 @@
 package com.cmcilroy.medicines_shortages_assistant.controllers;
 
 import org.springframework.http.MediaType;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
 import com.cmcilroy.medicines_shortages_assistant.TestData;
 import com.cmcilroy.medicines_shortages_assistant.domain.dto.PharmacyDto;
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.PharmacyEntity;
@@ -121,6 +119,66 @@ public class PharmacyControllerIntegrationTests {
         );
     }
 
+//////////////////////////////////////////////////////// PARTIAL UPDATE METHOD TESTS /////////////////////////////////////////////////////////
+
+    // test to check that partialUpdatePharmacy method returns a HTTP 404 Not Found code when record doesn't exist
+    @Test
+    public void testThatPartialUpdatePharmacyReturnsHttp404WhenNoRecordExists() throws Exception {
+        PharmacyDto pharmacy = TestData.createTestPharmacyDtoA();
+        // no entity saved in database here, so the record should not exist, and a HTTP 404 should be returned
+        String pharmacyJson = objectMapper.writeValueAsString(pharmacy);
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.patch("/pharmacies/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(pharmacyJson)
+        ).andExpect(
+            MockMvcResultMatchers.status().isNotFound()
+        );
+    }
+
+    // test to check that partialUpdatePharmacy method returns a HTTP 200 Ok code on updating existing record
+    @Test
+    public void testThatPartialUpdatePharmacyReturnsHttp200Ok() throws Exception{
+        PharmacyEntity pharmacyEntity = TestData.createTestPharmacyA();
+        pharmacyService.savePharmacy(pharmacyEntity.getPsiRegNo(), pharmacyEntity);
+        PharmacyDto pharmacyDto = TestData.createTestPharmacyDtoA();
+        // update pharmacy name of Dto to be passed in
+        pharmacyDto.setPharmacyName("UPDATED");
+        String pharmacyJson = objectMapper.writeValueAsString(pharmacyDto);
+        mockMvc.perform(
+            MockMvcRequestBuilders.patch("/pharmacies/" + pharmacyEntity.getPsiRegNo())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(pharmacyJson)
+        ).andExpect(
+            MockMvcResultMatchers.status().isOk()
+        );
+    }
+
+    // test to check that partialUpdatePharmacy method returns expected updated pharmacy
+    @Test
+    public void testThatPartialUpdatePharmacyReturnsUpdatedRecord() throws Exception{
+        PharmacyEntity pharmacyEntity = TestData.createTestPharmacyA();
+        pharmacyService.savePharmacy(pharmacyEntity.getPsiRegNo(), pharmacyEntity);
+        PharmacyDto pharmacyDto = TestData.createTestPharmacyDtoA();
+        // update pharmacy name of Dto to be passed in
+        pharmacyDto.setPharmacyName("UPDATED");
+        String pharmacyJson = objectMapper.writeValueAsString(pharmacyDto);
+        mockMvc.perform(
+            MockMvcRequestBuilders.patch("/pharmacies/" + pharmacyEntity.getPsiRegNo())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(pharmacyJson)
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.psiRegNo").value(pharmacyDto.getPsiRegNo())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.pharmacyName").value("UPDATED")
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.eircode").value(pharmacyDto.getEircode())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.phoneNo").value(pharmacyDto.getPhoneNo())
+        );
+    }
+
 ////////////////////////////////////////////////////////////// FIND METHODS TESTS ////////////////////////////////////////////////////////
 
     // test to check that listAllPharmacies method returns a HTTP 200 Ok code
@@ -143,13 +201,13 @@ public class PharmacyControllerIntegrationTests {
         MockMvcRequestBuilders.get("/pharmacies")
             .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$[0].psiRegNo").value(1234)
+            MockMvcResultMatchers.jsonPath("$.content[0].psiRegNo").value(1234)
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$[0].pharmacyName").value("Pharmacy A")
+            MockMvcResultMatchers.jsonPath("$.content[0].pharmacyName").value("Pharmacy A")
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$[0].eircode").value("AAAAAAA")
+            MockMvcResultMatchers.jsonPath("$.content[0].eircode").value("AAAAAAA")
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$[0].phoneNo").value("0123456789")
+            MockMvcResultMatchers.jsonPath("$.content[0].phoneNo").value("0123456789")
         );
     }
 
@@ -197,4 +255,32 @@ public class PharmacyControllerIntegrationTests {
             MockMvcResultMatchers.jsonPath("$.phoneNo").value("0123456789")
         );
     }
+
+//////////////////////////////////////////////////////// DELETE METHOD TESTS /////////////////////////////////////////////////////////
+
+    // test to check that deletePharmacy method returns a HTTP 204 No Content code when non-existent record is deleted
+    @Test
+    public void testThatDeleteNonExistentPharmacyReturnsHttp204() throws Exception {
+        mockMvc.perform(
+            MockMvcRequestBuilders.delete("/pharmacies/1")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+            MockMvcResultMatchers.status().isNoContent()
+        );
+    }
+
+    // test to check that deletePharmacy method returns a HTTP 204 No Content code when existing record is deleted
+    @Test
+    public void testThatDeleteExistingPharmacyReturnsHttp204() throws Exception {
+        PharmacyEntity pharmacy = TestData.createTestPharmacyA();
+        // persist Pharmacy entity in the test database
+        pharmacyService.savePharmacy(pharmacy.getPsiRegNo(), pharmacy);
+        mockMvc.perform(
+            MockMvcRequestBuilders.delete("/pharmacies/" + pharmacy.getPsiRegNo())
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+            MockMvcResultMatchers.status().isNoContent()
+        );
+    }
+
 }
