@@ -1,13 +1,9 @@
 ```
 └── 📁src
     └── 📁main
-        └── .DS_Store
         └── 📁java
-            └── .DS_Store
             └── 📁com
-                └── .DS_Store
                 └── 📁cmcilroy
-                    └── .DS_Store
                     └── 📁medicines_shortages_assistant
                         └── 📁config
                             └── MapperConfig.java
@@ -65,5 +61,4 @@
                         └── TestData.java
         └── 📁resources
             └── application.properties
-    └── .DS_Store
 ```
