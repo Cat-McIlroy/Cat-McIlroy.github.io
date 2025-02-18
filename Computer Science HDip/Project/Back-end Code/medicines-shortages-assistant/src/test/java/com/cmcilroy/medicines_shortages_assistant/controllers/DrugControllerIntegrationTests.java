@@ -91,6 +91,8 @@ public class DrugControllerIntegrationTests {
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.strength").value(drug.getStrength())
         ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.dosageForm").value(drug.getDosageForm())
+        ).andExpect(
             MockMvcResultMatchers.jsonPath("$.activeSubstance").value(drug.getActiveSubstance())
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.isAvailable").value(drug.getIsAvailable())
@@ -118,6 +120,8 @@ public class DrugControllerIntegrationTests {
             MockMvcResultMatchers.jsonPath("$.productName").value(drugDto.getProductName())
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.strength").value(drugDto.getStrength())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.dosageForm").value(drugDto.getDosageForm())
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.activeSubstance").value(drugDto.getActiveSubstance())
         ).andExpect(
@@ -181,6 +185,8 @@ public class DrugControllerIntegrationTests {
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.strength").value(drugDto.getStrength())
         ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.dosageForm").value(drugDto.getDosageForm())
+        ).andExpect(
             MockMvcResultMatchers.jsonPath("$.activeSubstance").value(drugDto.getActiveSubstance())
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.isAvailable").value(drugDto.getIsAvailable())
@@ -214,6 +220,8 @@ public class DrugControllerIntegrationTests {
             MockMvcResultMatchers.jsonPath("$.content[0].productName").value("Amlodipine Teva 5 mg Tablets")
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.content[0].strength").value("5 mg")
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.content[0].dosageForm").value("Tablet")
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.content[0].activeSubstance").value("Amlodipine")
         ).andExpect(
@@ -261,6 +269,8 @@ public class DrugControllerIntegrationTests {
             MockMvcResultMatchers.jsonPath("$.productName").value("Amlodipine Teva 5 mg Tablets")
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.strength").value("5 mg")
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.dosageForm").value("Tablet")
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.activeSubstance").value("Amlodipine")
         ).andExpect(

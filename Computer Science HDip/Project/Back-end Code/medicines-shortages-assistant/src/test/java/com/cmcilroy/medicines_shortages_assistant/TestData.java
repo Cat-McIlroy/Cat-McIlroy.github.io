@@ -25,6 +25,7 @@ public final class TestData {
                     .licenceNo("PA0749/067/001")
                     .productName("Amlodipine Teva 5 mg Tablets")
                     .strength("5 mg")
+                    .dosageForm("Tablet")
                     .activeSubstance("Amlodipine")
                     .isAvailable(true)
                     .build();
@@ -35,6 +36,7 @@ public final class TestData {
                     .licenceNo("PA2242/013/003")
                     .productName("Nexium 40 mg gastro-resistant tablets")
                     .strength("40 mg")
+                    .dosageForm("Gastro-resistant tablet")
                     .activeSubstance("Esomeprazole")
                     .isAvailable(true)
                     .build();
@@ -45,6 +47,7 @@ public final class TestData {
                     .licenceNo("EU/1/17/1251/002")
                     .productName("Ozempic")
                     .strength("0.25 mg")
+                    .dosageForm("Solution for injection in pre-filled pen")
                     .activeSubstance("Semaglutide")
                     .isAvailable(false)
                     .build();
@@ -115,6 +118,7 @@ public final class TestData {
                     .licenceNo("PA0749/067/001")
                     .productName("Amlodipine Teva 5 mg Tablets")
                     .strength("5 mg")
+                    .dosageForm("Tablet")
                     .activeSubstance("Amlodipine")
                     .isAvailable(true)
                     .build();
@@ -125,6 +129,7 @@ public final class TestData {
                     .licenceNo("PA2242/013/003")
                     .productName("Nexium 40 mg gastro-resistant tablets")
                     .strength("40 mg")
+                    .dosageForm("Gastro-resistant tablet")
                     .activeSubstance("Esomeprazole")
                     .isAvailable(true)
                     .build();
@@ -135,6 +140,7 @@ public final class TestData {
                     .licenceNo("EU/1/17/1251/002")
                     .productName("Ozempic")
                     .strength("0.25 mg")
+                    .dosageForm("Solution for injection in pre-filled pen")
                     .activeSubstance("Semaglutide")
                     .isAvailable(false)
                     .build();

@@ -17,6 +17,8 @@ public class DrugDto {
 
     private String strength;
 
+    private String dosageForm;
+
     private String activeSubstance;
 
     private Boolean isAvailable;

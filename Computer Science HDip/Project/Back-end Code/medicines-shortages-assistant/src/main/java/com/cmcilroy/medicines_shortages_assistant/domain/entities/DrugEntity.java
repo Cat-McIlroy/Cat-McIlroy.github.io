@@ -29,7 +29,10 @@ public class DrugEntity {
 
     private String strength;
 
-    @Column(name = "active_substance")
+    @Column(name = "dosage_form")
+    private String dosageForm;
+
+    @Column(name = "active_substance", length = 1000)
     private String activeSubstance;
 
     @Column(name = "is_available")
