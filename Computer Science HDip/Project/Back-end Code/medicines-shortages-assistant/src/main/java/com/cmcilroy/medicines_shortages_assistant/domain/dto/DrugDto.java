@@ -15,6 +15,8 @@ public class DrugDto {
 
     private String productName;
 
+    private String manufacturer;
+
     private String strength;
 
     private String dosageForm;

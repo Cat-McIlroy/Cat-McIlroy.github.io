@@ -23,6 +23,9 @@ public class Product {
     @JacksonXmlProperty(localName = "ProductName")
     private String productName;
 
+    @JacksonXmlProperty(localName = "PAHolder")
+    private String manufacturer;
+
     @JacksonXmlProperty(localName = "DosageForm")
     private String dosageForm;
 

@@ -2,18 +2,20 @@ package com.cmcilroy.medicines_shortages_assistant.controllers;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.cmcilroy.medicines_shortages_assistant.TestData;
+import com.cmcilroy.medicines_shortages_assistant.cleaner.DatabaseCleaner;
 import com.cmcilroy.medicines_shortages_assistant.domain.dto.DrugDto;
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.DrugEntity;
 import com.cmcilroy.medicines_shortages_assistant.services.DrugService;
@@ -21,7 +23,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @AutoConfigureMockMvc // creates an instance of MockMvc and places it into the application context ready for use
 public class DrugControllerIntegrationTests {
 
@@ -34,11 +35,22 @@ public class DrugControllerIntegrationTests {
     // and DrugService 
     private DrugService drugService;
 
+    // and DatabaseCleaner
+    private DatabaseCleaner databaseCleaner;
+
     @Autowired
-    public DrugControllerIntegrationTests(MockMvc mockMvc, DrugService drugService) {
+    public DrugControllerIntegrationTests(MockMvc mockMvc, DrugService drugService, DatabaseCleaner databaseCleaner) {
         this.mockMvc = mockMvc;
         this.objectMapper = new ObjectMapper();
         this.drugService = drugService;
+        this.databaseCleaner = databaseCleaner;
+    }
+
+///////////////////////////////////////////////// CLEAR DATABASE BEFORE EACH TEST ////////////////////////////////////////////////////
+
+    @BeforeEach
+    public void clearDatabase() {
+        databaseCleaner.clearDatabase();
     }
 
 ///////////////////////////////////////////////// CREATE & UPDATE METHOD TESTS ///////////////////////////////////////////////////////
@@ -89,6 +101,8 @@ public class DrugControllerIntegrationTests {
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.productName").value(drug.getProductName())
         ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.manufacturer").value(drug.getManufacturer())
+        ).andExpect(
             MockMvcResultMatchers.jsonPath("$.strength").value(drug.getStrength())
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.dosageForm").value(drug.getDosageForm())
@@ -118,6 +132,8 @@ public class DrugControllerIntegrationTests {
             MockMvcResultMatchers.jsonPath("$.licenceNo").value(drugDto.getLicenceNo())
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.productName").value(drugDto.getProductName())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.manufacturer").value(drugDto.getManufacturer())
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.strength").value(drugDto.getStrength())
         ).andExpect(
@@ -183,6 +199,8 @@ public class DrugControllerIntegrationTests {
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.productName").value("UPDATED")
         ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.manufacturer").value(drugDto.getManufacturer())
+        ).andExpect(
             MockMvcResultMatchers.jsonPath("$.strength").value(drugDto.getStrength())
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.dosageForm").value(drugDto.getDosageForm())
@@ -218,6 +236,8 @@ public class DrugControllerIntegrationTests {
             MockMvcResultMatchers.jsonPath("$.content[0].licenceNo").value("PA0749/067/001")
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.content[0].productName").value("Amlodipine Teva 5 mg Tablets")
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.content[0].manufacturer").value("Teva Pharma B.V")
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.content[0].strength").value("5 mg")
         ).andExpect(
@@ -267,6 +287,8 @@ public class DrugControllerIntegrationTests {
             MockMvcResultMatchers.jsonPath("$.licenceNo").value("PA0749/067/001")
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.productName").value("Amlodipine Teva 5 mg Tablets")
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.manufacturer").value("Teva Pharma B.V")
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.strength").value("5 mg")
         ).andExpect(

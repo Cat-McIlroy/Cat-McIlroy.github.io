@@ -1,17 +1,18 @@
 package com.cmcilroy.medicines_shortages_assistant.controllers;
 
 import org.springframework.http.MediaType;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.cmcilroy.medicines_shortages_assistant.TestData;
+import com.cmcilroy.medicines_shortages_assistant.cleaner.DatabaseCleaner;
 import com.cmcilroy.medicines_shortages_assistant.domain.dto.PharmacyDto;
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.PharmacyEntity;
 import com.cmcilroy.medicines_shortages_assistant.services.PharmacyService;
@@ -19,7 +20,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @AutoConfigureMockMvc // creates an instance of MockMvc and places it into the application context ready for use
 public class PharmacyControllerIntegrationTests {
 
@@ -32,12 +32,24 @@ public class PharmacyControllerIntegrationTests {
     // and PharmacyService
     private PharmacyService pharmacyService;
 
+    // and DatabaseCleaner 
+    private DatabaseCleaner databaseCleaner;
+
     @Autowired
-    public PharmacyControllerIntegrationTests(MockMvc mockMvc, PharmacyService pharmacyService) {
+    public PharmacyControllerIntegrationTests(MockMvc mockMvc, PharmacyService pharmacyService, DatabaseCleaner databaseCleaner) {
         this.mockMvc = mockMvc;
         this.objectMapper = new ObjectMapper();
         this.pharmacyService = pharmacyService;
+        this.databaseCleaner = databaseCleaner;
     }
+
+
+///////////////////////////////////////////////// CLEAR DATABASE BEFORE EACH TEST ////////////////////////////////////////////////////
+
+    @BeforeEach
+    public void clearDatabase() {
+        databaseCleaner.clearDatabase();
+    }    
 
 ///////////////////////////////////////////////// CREATE & UPDATE METHOD TESTS ///////////////////////////////////////////////////////
 

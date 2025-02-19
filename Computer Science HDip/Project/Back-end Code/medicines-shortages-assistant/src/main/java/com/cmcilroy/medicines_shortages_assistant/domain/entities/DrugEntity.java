@@ -27,6 +27,9 @@ public class DrugEntity {
     @Column(name = "product_name")
     private String productName;
 
+    @Column(name = "manufacturer")
+    private String manufacturer;
+
     private String strength;
 
     @Column(name = "dosage_form")

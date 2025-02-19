@@ -1,29 +1,41 @@
 package com.cmcilroy.medicines_shortages_assistant.repositories;
 
 import java.util.Optional;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 import com.cmcilroy.medicines_shortages_assistant.TestData;
+import com.cmcilroy.medicines_shortages_assistant.cleaner.DatabaseCleaner;
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.PharmacyEntity;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-// use DirtiesContext to clean the context after each test and prevent test pollution
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class PharmacyRepositoryIntegrationTests {
 
     // class under test
     private PharmacyRepository underTest;
 
+    // inject DatabaseCleaner
+    private DatabaseCleaner databaseCleaner;
+
     // constructor dependency injection
     @Autowired
-    public PharmacyRepositoryIntegrationTests(PharmacyRepository underTest) {
+    public PharmacyRepositoryIntegrationTests(PharmacyRepository underTest, DatabaseCleaner databaseCleaner) {
         this.underTest = underTest;
+        this.databaseCleaner = databaseCleaner;
+    }
+
+
+///////////////////////////////////////////////// CLEAR DATABASE BEFORE EACH TEST ////////////////////////////////////////////////////
+
+    @BeforeEach
+    public void clearDatabase() {
+        databaseCleaner.clearDatabase();
     }
 
     // tests that a pharmacy entity can be correctly created in the database (in the pharmacies table) and can subsequently be retrieved 
