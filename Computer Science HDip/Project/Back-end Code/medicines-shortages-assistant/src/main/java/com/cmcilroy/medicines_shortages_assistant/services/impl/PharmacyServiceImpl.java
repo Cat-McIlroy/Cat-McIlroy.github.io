@@ -1,21 +1,28 @@
 package com.cmcilroy.medicines_shortages_assistant.services.impl;
 
 import java.util.Optional;
+import java.util.Random;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.PharmacyEntity;
+import com.cmcilroy.medicines_shortages_assistant.repositories.PharmacyDrugAvailabilityRepository;
 import com.cmcilroy.medicines_shortages_assistant.repositories.PharmacyRepository;
 import com.cmcilroy.medicines_shortages_assistant.services.PharmacyService;
+
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class PharmacyServiceImpl implements PharmacyService{
 
-    // inject Repository
+    // inject Repositories
     private PharmacyRepository pharmacyRepository;
+    private PharmacyDrugAvailabilityRepository pharmacyDrugAvailabilityRepository;
 
-    public PharmacyServiceImpl(PharmacyRepository pharmacyRepository) {
+    public PharmacyServiceImpl(PharmacyRepository pharmacyRepository, PharmacyDrugAvailabilityRepository pharmacyDrugAvailabilityRepository) {
         this.pharmacyRepository = pharmacyRepository;
+        this.pharmacyDrugAvailabilityRepository = pharmacyDrugAvailabilityRepository;
     }
 
     // pass-through method. The Service layer is taking the Entity and passing it to the Repository which persists it in the database
@@ -25,6 +32,32 @@ public class PharmacyServiceImpl implements PharmacyService{
         pharmacy.setPsiRegNo(psiRegNo);
         // save returns an Entity by default
         return pharmacyRepository.save(pharmacy);
+    }
+
+    // method to populate the database with a set of fictional pharmacies, for app demonstration purposes
+    @Override
+    @PostConstruct
+    public void initialUpdate() {
+    
+        // clear database from any previous application runs
+        pharmacyDrugAvailabilityRepository.deleteAll();
+        pharmacyRepository.deleteAll();
+
+        Random random = new Random();
+        // build pharmacies called Pharmacy A through Pharmacy Z
+        // ascii codes 65 through 90
+        for(int i = 65; i <= 90; i++) {
+            PharmacyEntity pharmacy = PharmacyEntity.builder()
+                    // generate a random Integer to use as the psiRegNo
+                    .psiRegNo(Integer.valueOf(random.nextInt(10000) + 1000))
+                    .pharmacyName("Pharmacy " + (char) i)
+                    .eircode(String.valueOf((char) i).repeat(7))
+                    // generate a random phone number starting with 01
+                    .phoneNo(String.format("01%d %03d %04d", random.nextInt(900) + 100, random.nextInt(900) + 100, random.nextInt(10000)))
+                    .build();
+            // save the pharmacy to the database
+            pharmacyRepository.save(pharmacy);
+        }
     }
 
     @Override

@@ -56,6 +56,30 @@ public final class TestData {
                     .build();
     }    
 
+    public static DrugEntity createTestDrugD() {
+        return DrugEntity.builder()
+                    .licenceNo("PA0749/067/002")
+                    .productName("Amlodipine Teva 10 mg Tablets")
+                    .manufacturer("Teva Pharma B.V")
+                    .strength("10 mg")
+                    .dosageForm("Tablet")
+                    .activeSubstance("Amlodipine")
+                    .isAvailable(true)
+                    .build();
+    }
+
+    public static DrugEntity createTestDrugE() {
+        return DrugEntity.builder()
+                    .licenceNo("PA23055/012/003")
+                    .productName("Istin 5 mg hard capsule")
+                    .manufacturer("Upjohn EESV")
+                    .strength("5 mg")
+                    .dosageForm("Capsule, hard")
+                    .activeSubstance("Amlodipine")
+                    .isAvailable(true)
+                    .build();
+    }
+
     // Pharmacy Entity Test Methods
     public static PharmacyEntity createTestPharmacyA() {
         return PharmacyEntity.builder()

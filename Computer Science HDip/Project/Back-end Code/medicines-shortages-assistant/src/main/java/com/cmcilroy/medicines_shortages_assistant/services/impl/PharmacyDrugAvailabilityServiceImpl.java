@@ -1,27 +1,49 @@
 package com.cmcilroy.medicines_shortages_assistant.services.impl;
 
+import java.util.List;
 import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import com.cmcilroy.medicines_shortages_assistant.domain.entities.DrugEntity;
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.PharmacyDrugAvailabilityEntity;
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.PharmacyEntity;
+import com.cmcilroy.medicines_shortages_assistant.repositories.DrugRepository;
 import com.cmcilroy.medicines_shortages_assistant.repositories.PharmacyDrugAvailabilityRepository;
+import com.cmcilroy.medicines_shortages_assistant.repositories.PharmacyRepository;
+import com.cmcilroy.medicines_shortages_assistant.scrapers.WebScraper;
 import com.cmcilroy.medicines_shortages_assistant.services.PharmacyDrugAvailabilityService;
 import com.cmcilroy.medicines_shortages_assistant.services.PharmacyService;
 
 @Service 
 public class PharmacyDrugAvailabilityServiceImpl implements PharmacyDrugAvailabilityService{
 
-    // inject Repository
+    // inject Repositories
     private PharmacyDrugAvailabilityRepository pharmacyDrugAvailabilityRepository;
+    private PharmacyRepository pharmacyRepository;
+    private DrugRepository drugRepository;
 
     // inject Pharmacy Service
     private PharmacyService pharmacyService;
 
-    public PharmacyDrugAvailabilityServiceImpl(PharmacyDrugAvailabilityRepository pharmacyDrugAvailabilityRepository, PharmacyService pharmacyService) {
+    // inject Web Scraper
+    private WebScraper webScraper;
+
+    public PharmacyDrugAvailabilityServiceImpl(
+        PharmacyDrugAvailabilityRepository pharmacyDrugAvailabilityRepository,
+        PharmacyService pharmacyService,
+        PharmacyRepository pharmacyRepository,
+        DrugRepository drugRepository,
+        WebScraper webScraper
+        ) {
         this.pharmacyDrugAvailabilityRepository = pharmacyDrugAvailabilityRepository;
         this.pharmacyService = pharmacyService;
+        this.pharmacyRepository = pharmacyRepository;
+        this.drugRepository = drugRepository;
+        this.webScraper = webScraper;
     }
 
     // pass-through method. The Service layer is taking the Entity and passing it to the Repository which persists it in the database
@@ -39,9 +61,46 @@ public class PharmacyDrugAvailabilityServiceImpl implements PharmacyDrugAvailabi
         return pharmacyDrugAvailabilityRepository.save(pharmacyDrugAvailability);
     }
 
+    // run on start-up, but not until Drug and Pharmacy initial updates have taken place
+    // therefore use Scheduled to trigger method 5 seconds after start-up, not PostConstruct
+    @Override
+    @Scheduled(fixedDelay = 5000) 
+    public void initialUpdate() {
+        // get all of pharmacies from database
+        Iterable<PharmacyEntity> pharmacies = pharmacyRepository.findAll();
+        // scrape HPRA website for medicines shortages
+        List<String> shorts = webScraper.scrapeUnavailableDrugs();
+        // for each drug in the list of shorts
+        for(String shortDrug : shorts) {
+            // find the corresponding drug in the database and store it in DrugEntity object
+            Optional<DrugEntity> drug = drugRepository.findById(shortDrug);
+            // then, for each pharmacy, generate a random availability
+            for(PharmacyEntity pharmacy : pharmacies) {
+                // generate random boolean value
+                boolean isAvailable = Math.random() < 0.5;
+                // if isAvailable, build a PharmacyDrugAvailabilityEntity and save it to the database
+                if(isAvailable && drug.isPresent()) {
+                    PharmacyDrugAvailabilityEntity availability = 
+                        PharmacyDrugAvailabilityEntity.builder()
+                        // id is automatically generated so don't declare here
+                        .pharmacy(pharmacy)
+                        .drug(drug.get())
+                        .isAvailable(isAvailable)
+                        .build();
+                    pharmacyDrugAvailabilityRepository.save(availability);
+                }
+            }
+        }
+    }
+
     @Override
     public Page<PharmacyDrugAvailabilityEntity> findAll(Pageable pageable) {
         return pharmacyDrugAvailabilityRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<PharmacyDrugAvailabilityEntity> findAllByLicenceNo(String licenceNo, Pageable pageable) {
+        return pharmacyDrugAvailabilityRepository.findAllByLicenceNo(licenceNo, pageable);
     }
 
     @Override

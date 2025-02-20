@@ -1,5 +1,6 @@
 package com.cmcilroy.medicines_shortages_assistant.services.impl;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,8 +34,29 @@ public class DrugServiceImpl implements DrugService{
     }
 
     @Override
+    public Page<DrugEntity> findAllByActiveSubstance(String activeSubstance, Pageable pageable) {
+        return drugRepository.findAllByActiveSubstance(activeSubstance, pageable);
+    }
+
+    @Override
+    public Page<DrugEntity> findAllByComboActiveSubstances(String activeSubstance, Pageable pageable) {
+        return drugRepository.findAllByComboActiveSubstances(activeSubstance, pageable);
+    }
+
+    @Override
     public Optional<DrugEntity> findOne(String licenceNo) {
         return drugRepository.findById(licenceNo);
+    }
+
+    @Override
+    public Optional<DrugEntity> findByProductName(String productName) {
+        List<DrugEntity> drugsList = drugRepository.findByProductName(productName);
+        return Optional.ofNullable(drugsList.getFirst());
+    }
+
+    @Override
+    public Optional<DrugEntity> findByExactName(String productName) {
+            return drugRepository.findByExactName(productName);
     }
 
     @Override

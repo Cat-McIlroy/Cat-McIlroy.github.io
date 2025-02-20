@@ -19,4 +19,8 @@ public interface PharmacyDrugAvailabilityService {
 
     void delete(Long id);
 
+    void initialUpdate();
+
+    Page<PharmacyDrugAvailabilityEntity> findAllByLicenceNo(String licenceNo, Pageable pageable);
+
 }

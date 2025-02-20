@@ -19,4 +19,6 @@ public interface PharmacyService {
 
     void delete(Integer psiRegNo);
 
+    void initialUpdate();
+
 }

@@ -34,7 +34,17 @@ public class Product {
 
     // method to convert the activeSubstances List to a comma separated String
     public String getActiveSubstance() {
-        return activeSubstances != null ? String.join(", ", activeSubstances) : null;
+        if (activeSubstances == null || activeSubstances.isEmpty()) {
+            return "";
+        }
+        StringBuilder activeSubstance = new StringBuilder(activeSubstances.get(0));
+        for(int i = 1; i <= activeSubstances.size()-1; i++){
+            // if active substance is different from the element before it, concatenate it
+            if(!activeSubstances.get(i).equals(activeSubstances.get(i-1))) {
+                activeSubstance.append(", ").append(activeSubstances.get(i));
+            }
+        }
+        return activeSubstance.toString();
     }
 
 }

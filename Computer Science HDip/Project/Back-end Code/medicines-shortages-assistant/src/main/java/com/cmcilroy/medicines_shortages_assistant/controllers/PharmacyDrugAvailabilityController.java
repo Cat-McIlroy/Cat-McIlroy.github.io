@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.cmcilroy.medicines_shortages_assistant.domain.dto.PharmacyDrugAvailabilityDto;
+import com.cmcilroy.medicines_shortages_assistant.domain.entities.DrugEntity;
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.PharmacyDrugAvailabilityEntity;
 import com.cmcilroy.medicines_shortages_assistant.mappers.Mapper;
+import com.cmcilroy.medicines_shortages_assistant.services.DrugService;
 import com.cmcilroy.medicines_shortages_assistant.services.PharmacyDrugAvailabilityService;
 
 @RestController
@@ -24,11 +26,20 @@ public class PharmacyDrugAvailabilityController {
     // inject PharmacyDrugAvailabilityService and Mapper
     private PharmacyDrugAvailabilityService pharmacyDrugAvailabilityService;
 
+    // inject DrugService
+    private DrugService drugService;
+
     private Mapper<PharmacyDrugAvailabilityEntity, PharmacyDrugAvailabilityDto> pharmacyDrugAvailabilityMapper;
 
-    public PharmacyDrugAvailabilityController(PharmacyDrugAvailabilityService pharmacyDrugAvailabilityService, Mapper<PharmacyDrugAvailabilityEntity, PharmacyDrugAvailabilityDto> pharmacyDrugAvailabilityMapper) {
+    public PharmacyDrugAvailabilityController(
+        PharmacyDrugAvailabilityService pharmacyDrugAvailabilityService, 
+        Mapper<PharmacyDrugAvailabilityEntity, 
+        PharmacyDrugAvailabilityDto> pharmacyDrugAvailabilityMapper,
+        DrugService drugService
+        ) {
         this.pharmacyDrugAvailabilityService = pharmacyDrugAvailabilityService;
         this.pharmacyDrugAvailabilityMapper = pharmacyDrugAvailabilityMapper;
+        this.drugService = drugService;
     }
 
     // POST method to create a new pharmacy drug availability in the database
@@ -47,6 +58,24 @@ public class PharmacyDrugAvailabilityController {
         Page<PharmacyDrugAvailabilityEntity> availabilities = pharmacyDrugAvailabilityService.findAll(pageable);
         return availabilities.map(pharmacyDrugAvailabilityMapper::mapTo);
     }
+
+    // GET method to return a paginated list of pharmacy drug availabilities by licence no
+    @GetMapping(path = "/pharmacy-drug-availabilities/search-for-stock/{productName}")
+    public ResponseEntity<Page<PharmacyDrugAvailabilityDto>> listPharmacyDrugAvailabilitiesByDrug(
+        @PathVariable("productName") String productName, 
+        Pageable pageable
+    ) {
+        DrugEntity drug = drugService.findByExactName(productName).get();
+        String licenceNo = drug.getLicenceNo();
+        Page<PharmacyDrugAvailabilityEntity> availabilities = pharmacyDrugAvailabilityService.findAllByLicenceNo(licenceNo, pageable);
+        if(availabilities.hasContent()) {
+            return new ResponseEntity<>(availabilities.map(pharmacyDrugAvailabilityMapper::mapTo), HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 
     // GET method to return one pharmacy drug availability by Id
     @GetMapping(path = "/pharmacy-drug-availabilities/{id}")
