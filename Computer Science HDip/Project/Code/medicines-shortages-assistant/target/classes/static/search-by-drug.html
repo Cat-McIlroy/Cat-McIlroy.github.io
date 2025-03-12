@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drug Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            text-align: center;
+            padding: 50px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        #pagination {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Search by Product Name</h1>
+    
+    <form id="searchForm">
+        <label for="productName">Enter Product Name:</label>
+        <input type="text" id="productName" required/>
+        <button type="submit">Search</button>
+    </form>
+
+    <div id="results">
+        <table id="resultsTable" style="display: none;">
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Strength</th>
+                    <th>Manufacturer</th>
+                    <th>Availability</th>
+                </tr>
+            </thead>
+            <tbody id="drugTableBody"></tbody>
+        </table>
+    </div>
+
+    <div id="pagination"></div>
+
+    <script>
+        const apiUrl = "http://localhost:8080/drugs/search-by-product-name/";
+
+        async function fetchDrugs(productName, page = 0) {
+            try {
+                const response = await fetch(`${apiUrl}${productName}?page=${page}`);
+                const data = await response.json();
+
+                if (response.ok && data.content.length > 0) {
+                    displayDrugs(data.content);
+                    displayPagination(data, productName);
+                } else {
+                    document.getElementById('resultsTable').style.display = 'none';
+                    document.getElementById('results').innerHTML = '<p>No alternatives found for the product name.</p>';
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                document.getElementById('results').innerHTML = '<p>Error fetching data. Please try again later.</p>';
+            }
+        }
+
+        function displayDrugs(drugs) {
+            const table = document.getElementById('resultsTable');
+            const tbody = document.getElementById('drugTableBody');
+            tbody.innerHTML = '';
+
+            drugs.forEach(drug => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${drug.productName}</td>
+                    <td>${drug.strength}</td>
+                    <td>${drug.manufacturer}</td>
+                    <td>${drug.isAvailable ? 'Yes' : 'No'}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            table.style.display = 'table';
+        }
+
+        function displayPagination(data, productName) {
+            const paginationDiv = document.getElementById('pagination');
+            paginationDiv.innerHTML = '';
+            const currentPage = data.number;
+            const totalPages = data.totalPages;
+
+            if (currentPage > 0) {
+                const prevButton = document.createElement('button');
+                prevButton.textContent = 'Previous';
+                prevButton.onclick = () => fetchDrugs(productName, currentPage - 1);
+                paginationDiv.appendChild(prevButton);
+            }
+
+            if (currentPage < totalPages - 1) {
+                const nextButton = document.createElement('button');
+                nextButton.textContent = 'Next';
+                nextButton.onclick = () => fetchDrugs(productName, currentPage + 1);
+                paginationDiv.appendChild(nextButton);
+            }
+        }
+
+        document.getElementById('searchForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const productName = document.getElementById('productName').value;
+            fetchDrugs(productName);
+        });
+    </script>
+</body>
+</html>

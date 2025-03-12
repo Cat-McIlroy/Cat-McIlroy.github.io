@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search by Active Ingredient</title>
+    <link rel="stylesheet" href="styles/style.css"/>
+    <script src="scripts/check-auth.js"></script>
+</head>
+<body>
+    <header>
+        <div class="sign-in-out" id="sign-in-out">
+            <a href="sign-in.html" id="sign-in-out-link">Sign in</a>
+        </div>
+        <div class="logo">
+            <h1>Medicines Shortages Assistant</h1>
+            <img src="pill.jpeg" alt="Image of a red and white capsule">
+        </div>
+    </header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="search-availabilities.html">Search for Stock Availability</a>
+        <a href="search-product-name.html">Search by Product Name</a>
+        <a href="search-active-ingredient.html">Search by Active Ingredient</a>
+    </nav>
+    <div class="dropdown-form">
+        <p>Enter active ingredient:</p>
+        <form>
+            <div class="search-container">
+                <input type="text" id="active-ingredient" name="active-ingredient">
+                <input type="submit" value="Search">
+            </div>
+        </form>
+    </div>
+    <footer>
+        <div>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+        </div>
+        <p>&copy; 2025 Medicines Shortages Assistant</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search for Stock Availability</title>
+    <link rel="stylesheet" href="styles/style.css"/>
+    <script src="scripts/check-auth.js" defer></script>
+    <script src="scripts/populate-shorts-list.js" defer></script>
+    <script src="scripts/search-availabilities.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="sign-in-out" id="sign-in-out">
+            <a href="sign-in.html" id="sign-in-out-link">Sign in</a>
+        </div>
+        <div class="logo">
+            <h1>Medicines Shortages Assistant</h1>
+            <img src="pill.jpeg" alt="Image of a red and white capsule">
+        </div>
+    </header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="search-availabilities.html">Search for Stock Availability</a>
+        <a href="search-product-name.html">Search by Product Name</a>
+        <a href="search-active-ingredient.html">Search by Active Ingredient</a>
+    </nav>
+    <div class="dropdown-form">
+        <p>Select a product to search for stock availability:</p>
+        <form id="search-availabilities">
+            <select id="shorts" name="shorts"></select>
+            <div class="form-buttons">
+                <button type="submit">
+                    Search
+                </button>
+            </div>
+        </form>
+    </div>
+    <div id="message-container">
+        <!-- Div to hold success/error message, inserted dynamically using JavaScript -->
+    </div>
+    <div id="results-container">
+        <!-- Div to hold search results, inserted dynamically using JavaScript -->
+    </div>
+    <footer>
+        <div>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+        </div>
+        <p>&copy; 2025 Medicines Shortages Assistant</p>
+    </footer>
+</body>
+</html>

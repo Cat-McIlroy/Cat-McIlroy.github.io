@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicines Shortages Assistant</title>
+    <link rel="stylesheet" href="styles/style.css"/>
+    <script src="scripts/check-auth.js"></script>
+</head>
+<body>
+    <header>
+        <div class="sign-in-out" id="sign-in-out">
+            <a href="sign-in.html" id="sign-in-out-link">Sign in</a>
+        </div>
+        <div class="logo">
+            <h1>Medicines Shortages Assistant</h1>
+            <img src="pill.jpeg" alt="Image of a red and white capsule">
+        </div>
+    </header>
+    <div id="message-container">
+        <!-- Div to hold success/error message, inserted dynamically using JavaScript -->
+    </div>
+    <div class="buttons">
+        <button type="button" onclick="location.href='search-availabilities.html';">
+            Search for Stock Availability
+            <p>Browse the list of medicines currently in short supply and find a pharmacy with available stock</p>
+        </button>
+        <button type="button" onclick="location.href='search-product-name.html';">
+            Search by Product Name
+            <p>Enter a product name and find product alternatives</p>
+        </button>
+        <button type="button" onclick="location.href='search-active-ingredient.html';">
+            Search by Active Ingredient
+            <p>Enter an active ingredient and find product alternatives</p>
+        </button>
+    </div>
+    <footer>
+        <div>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+        </div>
+        <p>&copy; 2025 Medicines Shortages Assistant</p>
+    </footer>
+</body>
+</html>
