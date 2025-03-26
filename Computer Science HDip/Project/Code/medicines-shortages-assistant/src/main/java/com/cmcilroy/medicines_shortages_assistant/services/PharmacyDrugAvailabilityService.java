@@ -30,4 +30,6 @@ public interface PharmacyDrugAvailabilityService {
 
     Page<PharmacyDrugAvailabilityEntity> findAllByPharmacy(PharmacyEntity pharmacy, Pageable pageable);
 
+    void deleteAllByPharmacy(PharmacyEntity pharmacy);
+
 }

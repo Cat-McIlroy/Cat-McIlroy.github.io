@@ -24,7 +24,7 @@ public class PharmacyDrugAvailabilityEntity {
 
     // many drug availabilities can be associated with one pharmacy
     // if a pharmacy is deleted, automatically delete any associated entries in pharmacy_drug_availabilities table through cascade
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     // name of the column in the database which connects to the pharmacies table
     @JoinColumn(name = "pharmacy_id", referencedColumnName = "psi_registration_no")
     private PharmacyEntity pharmacy;

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Account Details</title>
+    <link rel="stylesheet" href="styles/style.css"/>
+    <script src="scripts/check-auth.js"></script>
+    <script src="scripts/edit-account.js"></script>
+</head>
+<body>
+    <header>
+        <div class="sign-in-out" id="sign-in-out">
+            <a href="sign-in.html" id="sign-in-out-link">Sign in</a>
+        </div>
+        <div class="logo" onclick="window.location.href='index.html';">
+            <h1>Medicines Shortages Assistant</h1>
+            <img src="pill.jpeg" alt="Image of a red and white capsule">
+        </div>
+    </header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="search-availabilities.html">Search for Stock Availability</a>
+        <a href="search-product-name.html">Search by Product Name</a>
+        <a href="search-active-ingredient.html">Search by Active Ingredient</a>
+    </nav>
+    <div id="message-container">
+        <!-- Div to hold success/error message, inserted dynamically using JavaScript -->
+    </div>
+    <div class="sign-in-form">
+        <p>Enter the account details you wish to change:</p>
+        <form>
+            <label for="phar-name">Pharmacy Name</label><br>
+            <input type="text" id="phar-name" name="phar-name"><br>
+            <label for="contact">Contact Number</label><br>
+            <input type="tel" id="contact" name="contact"><br>
+            <label for="email">Email</label><br>
+            <input type="email" id="email" name="email"><br>
+            <label for="new-password">Password</label><br>(must be minimum 12 characters, containing at least one lowercase letter, one uppercase letter, one number and one special character)
+            <input type="password" id="new-password" name="new-password"><br><br>
+            <p>Please re-enter password to proceed:</p>
+            <label for="existing-password" class="red-asterisk">Current Password</label><br>
+            <input type="password" id="existing-password" name="existing-password"><br><br>
+            <div class="form-buttons">
+            <button type="submit">
+                Submit
+            </button>
+            <button type="button" onclick="location.href='account-dashboard.html';">
+                Back
+            </button>
+            </div>
+        </form>
+    </div>
+    <footer>
+        <div>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </div>
+        <p>&copy; 2025 Medicines Shortages Assistant</p>
+    </footer>
+</body>
+</html>

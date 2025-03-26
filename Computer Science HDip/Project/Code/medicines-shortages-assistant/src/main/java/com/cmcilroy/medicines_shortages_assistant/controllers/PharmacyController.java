@@ -21,9 +21,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cmcilroy.medicines_shortages_assistant.domain.dto.AccountCredentialsDto;
+import com.cmcilroy.medicines_shortages_assistant.domain.dto.EditAccountDto;
 import com.cmcilroy.medicines_shortages_assistant.domain.dto.PharmacyDto;
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.PharmacyEntity;
 import com.cmcilroy.medicines_shortages_assistant.mappers.Mapper;
+import com.cmcilroy.medicines_shortages_assistant.services.PharmacyDrugAvailabilityService;
 import com.cmcilroy.medicines_shortages_assistant.services.PharmacyService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,15 +34,19 @@ import jakarta.servlet.http.HttpSession;
 @RestController
 public class PharmacyController {
 
-    // inject PharmacyService and Mapper
+    // inject PharmacyService, PharmacyDrugAvailabilityService and Mapper
     private PharmacyService pharmacyService;
+    private PharmacyDrugAvailabilityService pharmacyDrugAvailabilityService;
 
     private Mapper<PharmacyEntity, PharmacyDto> pharmacyMapper;
 
     // constructor injection
-    public PharmacyController(PharmacyService pharmacyService, Mapper<PharmacyEntity, PharmacyDto> pharmacyMapper) {
+    public PharmacyController(PharmacyService pharmacyService, 
+    Mapper<PharmacyEntity, PharmacyDto> pharmacyMapper,
+    PharmacyDrugAvailabilityService pharmacyDrugAvailabilityService) {
         this.pharmacyService = pharmacyService;
         this.pharmacyMapper = pharmacyMapper;
+        this.pharmacyDrugAvailabilityService = pharmacyDrugAvailabilityService;
     }
 
 
@@ -59,11 +65,17 @@ public class PharmacyController {
             // get the account user name from the authentication
             PharmacyDto pharmacyDto = (PharmacyDto) authentication.getPrincipal();
             String pharmacyName = pharmacyDto.getPharmacyName();
+            Integer psiRegNo = pharmacyDto.getPsiRegNo();
+            String address = pharmacyDto.getAddress();
+            String eircode = pharmacyDto.getEircode();
 
             // create Map including necessary data
             Map<String, Object> data = new HashMap<>();
             data.put("pharmacyName", pharmacyName);
             data.put("authenticated", true);
+            data.put("psiRegNo", psiRegNo);
+            data.put("address", address);
+            data.put("eircode", eircode);
 
             return new ResponseEntity<>(data, HttpStatus.OK);
         }
@@ -114,7 +126,7 @@ public class PharmacyController {
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                 pharmacyDto, 
                 null, 
-                List.of(new SimpleGrantedAuthority("ROLE_PHARMACY_USER"))
+                List.of(new SimpleGrantedAuthority("PHARMACY_USER"))
             );
             // store authentication in the SecurityContext
             SecurityContextHolder.getContext().setAuthentication(authToken);
@@ -145,8 +157,11 @@ public class PharmacyController {
     // PATCH method to partially update a pharmacy contained in the database
     @PatchMapping(path = "/pharmacies/edit-account-details")
     // RequestBodyAnnotation tells Spring to look at the HTTP request body for the PharmacyDto object represented as JSON and convert to Java
-    public ResponseEntity<PharmacyDto> updatePharmacy(
-    @RequestBody PharmacyDto pharmacyDto, String password) {
+    public ResponseEntity<PharmacyDto> updatePharmacy(@RequestBody EditAccountDto requestBody, HttpSession session) {
+        // extract the pharmacyDto from the requestBody
+        PharmacyDto pharmacyDto = requestBody.getPharmacy();
+        // extract the password from the requestBody
+        String password = requestBody.getCurrentPassword();
         try{
             // get the pharmacy dto object from the pharmacy user currently signed in
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -163,6 +178,16 @@ public class PharmacyController {
             PharmacyEntity updatedPharmacyEntity = pharmacyService.updatePharmacy(password, pharmacyEntity);
             // map the entity back to a Dto
             PharmacyDto updatedPharmacyDto = pharmacyMapper.mapTo(updatedPharmacyEntity);
+            // update the authentication
+            authentication = new UsernamePasswordAuthenticationToken(
+                updatedPharmacyDto,
+                null, 
+                List.of(new SimpleGrantedAuthority("ROLE_PHARMACY_USER")) 
+            );
+
+            // set the updated authentication in the security context
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
             return new ResponseEntity<>(updatedPharmacyDto, HttpStatus.OK);
         }
         catch(UsernameNotFoundException e){
@@ -183,10 +208,15 @@ public class PharmacyController {
 
     // DELETE method to delete a specific pharmacy from the database
     @DeleteMapping(path = "/pharmacies/delete-account")
-    public ResponseEntity<Void> deletePharmacy(String password) {
+    public ResponseEntity<Void> deletePharmacy(@RequestBody Map<String, String> requestBody) {
+        // extract the password from the request body
+        String password = requestBody.get("password");
         // get the pharmacy dto object from the pharmacy user currently signed in
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         PharmacyDto pharmacyDto = (PharmacyDto) authentication.getPrincipal();
+        // delete any associated stock availability listings
+        pharmacyDrugAvailabilityService.deleteAllByPharmacy(pharmacyMapper.mapFrom(pharmacyDto));
+        
         try{
             pharmacyService.delete(password, pharmacyMapper.mapFrom(pharmacyDto));
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

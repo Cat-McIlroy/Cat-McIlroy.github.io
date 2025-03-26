@@ -12,6 +12,8 @@ import com.cmcilroy.medicines_shortages_assistant.domain.entities.PharmacyEntity
 import com.cmcilroy.medicines_shortages_assistant.repositories.PharmacyDrugAvailabilityRepository;
 import com.cmcilroy.medicines_shortages_assistant.services.PharmacyDrugAvailabilityService;
 
+import jakarta.transaction.Transactional;
+
 @Service 
 public class PharmacyDrugAvailabilityServiceImpl implements PharmacyDrugAvailabilityService{
 
@@ -112,6 +114,12 @@ public class PharmacyDrugAvailabilityServiceImpl implements PharmacyDrugAvailabi
     @Override
     public void delete(Long id) {
         pharmacyDrugAvailabilityRepository.deleteById(id);
+    }
+
+    @Transactional
+    @Override
+    public void deleteAllByPharmacy(PharmacyEntity pharmacy) {
+        pharmacyDrugAvailabilityRepository.deleteAllByPharmacy(pharmacy);
     }
 
 }

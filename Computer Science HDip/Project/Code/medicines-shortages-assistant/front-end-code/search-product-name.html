@@ -6,13 +6,14 @@
     <title>Search by Product Name</title>
     <link rel="stylesheet" href="styles/style.css"/>
     <script src="scripts/check-auth.js"></script>
+    <script src="scripts/search-product-name.js"></script>
 </head>
 <body>
     <header>
         <div class="sign-in-out" id="sign-in-out">
             <a href="sign-in.html" id="sign-in-out-link">Sign in</a>
         </div>
-        <div class="logo">
+        <div class="logo" onclick="window.location.href='index.html';">
             <h1>Medicines Shortages Assistant</h1>
             <img src="pill.jpeg" alt="Image of a red and white capsule">
         </div>
@@ -25,17 +26,23 @@
     </nav>
     <div class="dropdown-form">
         <p>Enter product name:</p>
-        <form>
+        <form id="product-name-search">
             <div class="search-container">
                 <input type="text" id="product-name" name="product-name">
                 <input type="submit" value="Search">
             </div>
         </form>
     </div>
+    <div id="message-container">
+        <!-- Div to hold success/error message, inserted dynamically using JavaScript -->
+    </div>
+    <div id="results-container">
+        <!-- Div to hold search results, inserted dynamically using JavaScript -->
+    </div>
     <footer>
         <div>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
         </div>
         <p>&copy; 2025 Medicines Shortages Assistant</p>
     </footer>

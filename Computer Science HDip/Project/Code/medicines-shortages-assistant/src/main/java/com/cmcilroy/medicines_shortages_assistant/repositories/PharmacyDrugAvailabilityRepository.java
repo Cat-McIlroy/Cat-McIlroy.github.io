@@ -23,4 +23,7 @@ PagingAndSortingRepository<PharmacyDrugAvailabilityEntity, Long> {
     // find existing records for specific pharmacy and drug combination
     boolean existsByPharmacyAndDrug(PharmacyEntity pharmacy, DrugEntity drug);
 
+    // delete all availability records associated with a specific pharmacy
+    void deleteAllByPharmacy(PharmacyEntity pharmacy);
+
 }

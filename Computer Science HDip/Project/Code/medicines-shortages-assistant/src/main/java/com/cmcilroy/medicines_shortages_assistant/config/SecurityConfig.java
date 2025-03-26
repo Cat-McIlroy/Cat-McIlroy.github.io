@@ -49,12 +49,6 @@ public class SecurityConfig{
             .authorizeHttpRequests(auth -> auth
                 // public endpoints
                 .requestMatchers(
-                    "/index.html",
-                    "/search-availabilities.html",
-                    "/search-product-name.html",
-                    "/search-active-ingredient.html",
-                    "/registration.html",
-                    "/sign-in.html",
                     "/pharmacies/register",
                     "/pharmacies/sign-in",
                     "/pharmacies/check-auth",
@@ -65,15 +59,12 @@ public class SecurityConfig{
                 ).permitAll()
                 // endpoints restricted to authenticated pharmacy users only
                 .requestMatchers(
-                    // "/drugs/**",
                     "/pharmacies/sign-out",
+                    "/pharmacies/delete-account",
+                    "/pharmacies/edit-account-details",
                     "/pharmacy-drug-availabilities/create",
                     "/pharmacy-drug-availabilities/view-all",
-                    "/pharmacy-drug-availabilities/update/{id}",
-                    "/pharmacy-drug-availabilities/delete/{id}",
-                    "/account-dashboard.html",
-                    "/create-availability.html"
-                    // "/pharmacy-drug-availabilities/**"
+                    "/pharmacy-drug-availabilities/delete/{id}"
                 ).hasRole("PHARMACY_USER")
             )
             // enable session-based authentication to persist authentication across requests

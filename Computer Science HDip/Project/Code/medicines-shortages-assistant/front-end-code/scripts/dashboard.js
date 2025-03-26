@@ -16,8 +16,9 @@ document.addEventListener("DOMContentLoaded", async function() {
             
             // extract account username from API response
             const pharmacyName = data.pharmacyName;
-            
+            console.log("Updated pharmacy name:", data.pharmacyName);
             const welcomeText = document.createElement("strong");
+            welcomeText.id = "welcome-message";
             welcomeText.textContent = "Welcome, " + data.pharmacyName;
             welcomeMessageDiv.appendChild(welcomeText);
         }

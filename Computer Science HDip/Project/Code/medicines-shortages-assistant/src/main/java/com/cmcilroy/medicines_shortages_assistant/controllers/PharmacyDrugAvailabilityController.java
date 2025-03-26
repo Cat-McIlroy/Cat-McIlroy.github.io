@@ -10,7 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -72,7 +71,7 @@ public class PharmacyDrugAvailabilityController {
 
     //////////////////////////////////////////////// PHARMACY USERS ONLY ////////////////////////////////////////////////////////////
 
-    ////////////////////////////////////////// VIEW ALL EXISTING STOCK AVAILABILITY LISTINGS ////////////////////////////////////////
+    ////////////////////////////////////////// VIEW ALL EXISTING PHARMACY STOCK AVAILABILITY LISTINGS ////////////////////////////////////////
 
     // GET method to return a paginated list of all pharmacy drug availabilities associated with the current pharmacy user
     @GetMapping(path = "/pharmacy-drug-availabilities/view-all")
@@ -129,26 +128,6 @@ public class PharmacyDrugAvailabilityController {
         return new ResponseEntity<>(pharmacyDrugAvailabilityMapper.mapTo(savedPharmacyDrugAvailabilityEntity), HttpStatus.CREATED);
     }
 
-    ///////////////////////////////////////// MODIFY AN EXISTING STOCK AVAILABILITY LISTING ///////////////////////////////////////////////
-
-    // PATCH method to partially update a specific pharmacy drug availability
-    @PatchMapping(path = "/pharmacy-drug-availabilities/update/{id}")
-    public ResponseEntity<PharmacyDrugAvailabilityDto> updatePharmacyDrugAvailability(
-        @PathVariable("id") Long id,
-        @RequestParam boolean isAvailable
-    ) {
-        // if the specified pharmacy drug availability does not exist in the database
-        if(!pharmacyDrugAvailabilityService.isPresent(id)){
-            // return a HTTP 404 Not Found 
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        // call partial update method of pharmacy drug availability service, passing in id and updated availability status
-        PharmacyDrugAvailabilityEntity updatedPharmacyDrugAvailabilityEntity = 
-        pharmacyDrugAvailabilityService.updateAvailability(id, isAvailable);
-        // map the updated entity back to a dto and return this object inside a ResponseEntity with a HTTP 200 Ok 
-        return new ResponseEntity<>(pharmacyDrugAvailabilityMapper.mapTo(updatedPharmacyDrugAvailabilityEntity), HttpStatus.OK);
-    }
-
     ///////////////////////////////////////// DELETE AN EXISTING STOCK AVAILABILITY LISTING ///////////////////////////////////////////////
 
     // DELETE method to delete a specific pharmacy drug availability from the database
@@ -161,6 +140,27 @@ public class PharmacyDrugAvailabilityController {
     }
 
     /////////////////////////////////////////////////// CURRENTLY UNUSED ENDPOINTS ///////////////////////////////////////////////////////
+
+
+    ///////////////////////////////////////// MODIFY AN EXISTING STOCK AVAILABILITY LISTING ///////////////////////////////////////////////
+
+    // PATCH method to partially update a specific pharmacy drug availability
+    // @PatchMapping(path = "/pharmacy-drug-availabilities/update/{id}")
+    // public ResponseEntity<PharmacyDrugAvailabilityDto> updatePharmacyDrugAvailability(
+    //     @PathVariable("id") Long id,
+    //     @RequestParam boolean isAvailable
+    // ) {
+    //     // if the specified pharmacy drug availability does not exist in the database
+    //     if(!pharmacyDrugAvailabilityService.isPresent(id)){
+    //         // return a HTTP 404 Not Found 
+    //         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    //     }
+    //     // call partial update method of pharmacy drug availability service, passing in id and updated availability status
+    //     PharmacyDrugAvailabilityEntity updatedPharmacyDrugAvailabilityEntity = 
+    //     pharmacyDrugAvailabilityService.updateAvailability(id, isAvailable);
+    //     // map the updated entity back to a dto and return this object inside a ResponseEntity with a HTTP 200 Ok 
+    //     return new ResponseEntity<>(pharmacyDrugAvailabilityMapper.mapTo(updatedPharmacyDrugAvailabilityEntity), HttpStatus.OK);
+    // }
 
     // GET method to return one pharmacy drug availability by Id
     // @GetMapping(path = "/pharmacy-drug-availabilities/{id}")

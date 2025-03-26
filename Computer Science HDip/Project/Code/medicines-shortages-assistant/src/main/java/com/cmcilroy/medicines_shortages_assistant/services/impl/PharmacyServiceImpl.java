@@ -13,6 +13,8 @@ import com.cmcilroy.medicines_shortages_assistant.repositories.PharmacyRepositor
 import com.cmcilroy.medicines_shortages_assistant.scrapers.WebScraper;
 import com.cmcilroy.medicines_shortages_assistant.services.PharmacyService;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class PharmacyServiceImpl implements PharmacyService{
 
@@ -99,25 +101,25 @@ public class PharmacyServiceImpl implements PharmacyService{
         PharmacyEntity record = recordOpt.orElseThrow(() -> new UsernameNotFoundException("No account found."));
 
         // check if the password entered (once encoded) does not match the encoded password in the database
-        if(!passwordEncoder.matches(password, pharmacy.getPassword())) {
+        if(!passwordEncoder.matches(password, record.getPassword())) {
             // incorrect password, throw exception
             throw new BadCredentialsException("Incorrect password. Please try again.");
         }
 
-        // update pharmacy name if different from existing pharmacy name (useful in the case of a sale/takeover/merge)
-        if(!record.getPharmacyName().equalsIgnoreCase(pharmacy.getPharmacyName())) {
+        // update pharmacy name if different from existing pharmacy name and not empty string (useful in the case of a sale/takeover/merge)
+        if(!record.getPharmacyName().equalsIgnoreCase(pharmacy.getPharmacyName()) && !pharmacy.getPharmacyName().equalsIgnoreCase("")) {
             record.setPharmacyName(pharmacy.getPharmacyName());
         }
-        // update contact number if different from existing contact number
-        if(!record.getPhoneNo().equalsIgnoreCase(pharmacy.getPhoneNo())) {
+        // update contact number if different from existing contact number and not empty string
+        if(!record.getPhoneNo().equalsIgnoreCase(pharmacy.getPhoneNo()) && !pharmacy.getPhoneNo().equalsIgnoreCase("")) {
             record.setPhoneNo(pharmacy.getPhoneNo());
         }
-        // update email if different from existing email
-        if(!record.getEmail().equalsIgnoreCase(pharmacy.getEmail())) {
+        // update email if different from existing email and not empty string
+        if(!record.getEmail().equalsIgnoreCase(pharmacy.getEmail()) && !pharmacy.getEmail().equalsIgnoreCase("")) {
             record.setEmail(pharmacy.getEmail());
         }
-        // update password if different from existing password
-        if(!passwordEncoder.matches(record.getPassword(), pharmacy.getPassword())) {
+        // update password if different from existing password and not empty string
+        if(!passwordEncoder.matches(record.getPassword(), pharmacy.getPassword()) && !pharmacy.getPassword().equalsIgnoreCase("")) {
             record.setPassword(pharmacy.getPassword());
         }
         // do not support update of PSI Registration Number, Address, or Eircode, as these should stay constant
@@ -127,6 +129,7 @@ public class PharmacyServiceImpl implements PharmacyService{
 
     //////////////////////////////////////////////////////// DELETE ACCOUNT ///////////////////////////////////////////////////////////
 
+    @Transactional
     @Override
     public void delete(String password, PharmacyEntity pharmacy) {
 
@@ -136,7 +139,7 @@ public class PharmacyServiceImpl implements PharmacyService{
             throw new UsernameNotFoundException("No account found.");
         }
 
-        // check if the password entered (once encoded) does not match the encoded password in the database
+        // check if the password entered does not match the password in the database
         if(!passwordEncoder.matches(password, pharmacy.getPassword())) {
             // incorrect password, throw exception
             throw new BadCredentialsException("Incorrect password. Please try again.");

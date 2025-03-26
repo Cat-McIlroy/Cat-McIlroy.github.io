@@ -31,6 +31,7 @@ header {
     font-size: 2.2vw;
     font-stretch: extra-condensed;
     white-space: nowrap;
+    cursor: pointer;
 }
 
 .logo img {
@@ -69,6 +70,14 @@ footer {
 footer a {
     color: black;
     margin: 40px;
+}
+
+.about {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
 }
 
 .buttons {
@@ -141,6 +150,14 @@ form textarea, form input, form select {
     cursor: pointer;
 }
 
+.about button {
+    width: 10%;
+    padding: 10px;
+    font-size: 1rem;
+    background-color: lightgray;
+    cursor: pointer;
+}
+
 #shorts {
     border: 2px solid black;    
 }
@@ -176,6 +193,9 @@ form textarea, form input, form select {
 .results-table {
     width: 80%;
     border-collapse: collapse;
+    max-width: 100%;
+    overflow-x: auto;
+    display: block;
     margin: 20px auto;
     background-color: lightgray; 
     border: 2px solid black;
@@ -183,7 +203,7 @@ form textarea, form input, form select {
 
 .results-table th, 
 .results-table td {
-    border: 1px solid #ddd; /* Border for each cell */
+    border: 1px solid #ddd;
     padding: 12px;
     text-align: left;
 }
@@ -195,4 +215,16 @@ form textarea, form input, form select {
 
 .results-table td {
     background-color: white;
+}
+
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px; 
+    margin-left: auto; 
+    margin-right: auto;
+}
+
+.pagination-controls button {
+    margin: 20px;
 }

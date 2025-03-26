@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.cmcilroy.medicines_shortages_assistant.domain.dto.DrugDto;
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.DrugEntity;
@@ -107,10 +107,12 @@ public class DrugController {
 
     // GET method to return a paginated list of all products contained in the database 
     // with the active substance passed in
-    @GetMapping(path = "/drugs/search-by-active-substance/{activeSubstance}")
-    public ResponseEntity<Page<DrugDto>> listDrugNamesByActiveSubstance(@PathVariable("activeSubstance") String activeSubstance, Pageable pageable) {
-            // if active substance contains commas (i.e. it is a combination drug)
-            if(activeSubstance.contains(",")){
+    @GetMapping(path = "/drugs/search-by-active-substance")
+    public ResponseEntity<Page<DrugDto>> listDrugNamesByActiveSubstance(@RequestParam String activeSubstance, Pageable pageable) {
+            // if active substance contains commas or forward slashes (i.e. it is a combination drug)
+            if(activeSubstance.contains(",") || activeSubstance.contains("/")){
+                // replace forward slash with comma, as active substance combinations in the database are comma separated
+                activeSubstance = activeSubstance.replace('/', ',');
                 // find all drugs in the database with the same combination of active substances
                 Page<DrugEntity> drugs = drugService.findAllByComboActiveSubstances(activeSubstance, pageable);
                 if(drugs.hasContent()) {
@@ -134,8 +136,8 @@ public class DrugController {
 
     // GET method to return a paginated list of all alternative product names contained in the database 
     // with the same active substance as the product name passed in
-    @GetMapping(path = "/drugs/search-by-product-name/{productName}")
-    public ResponseEntity<Page<DrugDto>> listAlternativeDrugNames(@PathVariable("productName") String productName, Pageable pageable) {
+    @GetMapping(path = "/drugs/search-by-product-name")
+    public ResponseEntity<Page<DrugDto>> listAlternativeDrugNames(@RequestParam String productName, Pageable pageable) {
         // find DrugEntity with product name passed in
         Optional<DrugEntity> drug = drugService.findByContainsProductName(productName);
         if(drug.isEmpty()) {
@@ -148,12 +150,22 @@ public class DrugController {
             if(activeSubstance.contains(",")){
                 // find all drugs in the database with the same combination of active substances
                 Page<DrugEntity> drugs = drugService.findAllByComboActiveSubstances(activeSubstance, pageable);
-                return new ResponseEntity<>(drugs.map(drugMapper::mapTo), HttpStatus.OK);
+                if(drugs.hasContent()){
+                    return new ResponseEntity<>(drugs.map(drugMapper::mapTo), HttpStatus.OK);
+                }
+                else{
+                    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                }
             }
             else{
                 // find all drugs in the database with the same active substance and return these as a Paginated list
                 Page<DrugEntity> drugs = drugService.findAllByActiveSubstance(activeSubstance, pageable);
-                return new ResponseEntity<>(drugs.map(drugMapper::mapTo), HttpStatus.OK);
+                if(drugs.hasContent()){
+                    return new ResponseEntity<>(drugs.map(drugMapper::mapTo), HttpStatus.OK);
+                }
+                else{
+                    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                }
             }
         }
     }

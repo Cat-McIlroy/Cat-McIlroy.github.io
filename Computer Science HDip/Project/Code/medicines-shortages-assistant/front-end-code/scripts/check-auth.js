@@ -41,6 +41,7 @@ document.addEventListener("DOMContentLoaded", async function() {
                 
                 const signedInAsText = document.createElement("strong");
                 signedInAsText.textContent = "Signed in as " + data.pharmacyName;
+                signedInAsText.id = "account-name";
                 accountInfoDiv.appendChild(signedInAsText);
 
                 // create account dashboard link

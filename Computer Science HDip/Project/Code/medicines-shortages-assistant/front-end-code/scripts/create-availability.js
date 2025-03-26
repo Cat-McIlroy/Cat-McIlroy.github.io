@@ -32,17 +32,17 @@ document.addEventListener("DOMContentLoaded", function() {
                 credentials: "include"
             });
 
-            messageContainer.style.display = "flex";
             // if the response from the API is ok
             if (response.ok) {
                 // add success message to the screen
-                messageContainer.innerHTML = "Availability listing added successfully.";
+                alert("Availability listing added successfully.");
             } 
             
             else {
                 // extract the http status from the create availability API and throw it as a new error
                 // or if it is an undefined error, display generic error message
                 if(response.status == 409){
+                    messageContainer.style.display = "flex";
                     messageContainer.innerHTML = "This account already has an availability listing for the selected product.";
                 }
                 else{
