@@ -1,11 +1,11 @@
 package com.cmcilroy.medicines_shortages_assistant.services.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.DrugEntity;
@@ -19,7 +19,7 @@ public class DrugServiceImpl implements DrugService{
     private DrugRepository drugRepository;
 
     // active substance synonym map
-    private Map<String, List<String>> SYNONYM_MAP = Map.of(
+    private Map<String, List<String>> synonymMap = Map.of(
         "aspirin", List.of(
             "aspirin",
             "acetylsalicylic acid",
@@ -34,37 +34,6 @@ public class DrugServiceImpl implements DrugService{
         )
         
     );
-
-    private String[] salts = {
-        " acetate",
-        " arginine",
-        " besilate", 
-        " maleate", 
-        " mesilate",
-        " medoxomil",
-        " chloride", 
-        " carbonate",
-        " hydrochloride", 
-        " dihydrochloride", 
-        " potassium", 
-        " phosphate",
-        " sodium", 
-        " disodium",
-        " sodium phosphate",
-        " citrate",
-        " gluconate",
-        " sulfate",
-        " sulphate",
-        " tartrate",
-        " fumarate",
-        " hemifumarate",
-        " dinitrate",
-        " benzoate",
-        " monohydrate",
-        " dimesylate",
-        " hemihydrate"
-        };
-
 
     public DrugServiceImpl(DrugRepository drugRepository) {
         this.drugRepository = drugRepository;
@@ -90,10 +59,10 @@ public class DrugServiceImpl implements DrugService{
     }
 
     @Override
-    public Page<DrugEntity> findAllByActiveSubstance(String activeSubstance, Pageable pageable) {
+    public List<DrugEntity> findAllByActiveSubstance(String activeSubstance) {
         // allowing for drug synonyms, search synonym map keys and values
         // call entrySet method to retrieve a set of key-value pairs from the map, convert the set to a stream
-        List<String> synonyms = SYNONYM_MAP.entrySet().stream()
+        List<String> synonyms = synonymMap.entrySet().stream()
             // check each entry to see if the active substance matches the key or is present in the list of values for that entry
             .filter(entry -> entry.getValue().stream()
                 // any match returns true if any value matches the active substance
@@ -109,77 +78,113 @@ public class DrugServiceImpl implements DrugService{
         // for each synonym in the list of synonyms
         for (String synonym : synonyms) {
             // search the database using that active ingredient and add results to the list
-            results.addAll(drugRepository.findAllByActiveSubstanceIgnoreCase(synonym));
-            // for each salt in the salts array
-            for(String salt : salts) {
-                // append it to the synonym and search the database for it, and add results to the list
-                results.addAll(drugRepository.findAllByActiveSubstanceIgnoreCase(synonym + salt));
+            results.addAll(drugRepository.findAllByContainsActiveSubstance(synonym));
+        }
+
+        List<DrugEntity> filteredResults = new ArrayList<>();
+        // now filter for only entries which do not contain commas (those are combination drugs)
+        for(DrugEntity result : results) {
+            // allow for quirk in Utrogestan 200mg record, where the active is 'PROGESTERONE, MICRONISED'
+            if(result.getActiveSubstance().equalsIgnoreCase("Progesterone, Micronised")) {
+                filteredResults.add(result);
+            }
+            else if(!result.getActiveSubstance().contains(",")) {
+                filteredResults.add(result);
             }
         }
 
-        // convert the final results list into a Page and return it
-        int start = (int) pageable.getOffset();
-        int end = Math.min(start + pageable.getPageSize(), results.size());
-
-        if (start >= results.size()) {
-            // if start is beyond the size of the results, return an empty page
-            return new PageImpl<>(new ArrayList<>(), pageable, results.size());
-        }
-        List<DrugEntity> pagedResults = results.subList(start, end);
-
-        return new PageImpl<DrugEntity>(pagedResults, pageable, results.size());
+        return filteredResults;
 
     }
 
     @Override
-    public Page<DrugEntity> findAllByComboActiveSubstances(String activeSubstance, Pageable pageable) {
+    public List<DrugEntity> findAllByComboActiveSubstances(String activeSubstance) {
         // list to hold the search results
         List<DrugEntity> results = new ArrayList<>();
-        // search the database using the combination of active substances passed in and add results to the list
-        results.addAll(drugRepository.findAllByComboActiveSubstances(activeSubstance));
+        // retrieve all records from the database drugs table
+        Iterable<DrugEntity> allDrugs = findAll();
         // split the activeSubstance string into an array of Strings on the commas, to get an array of the active substances in the combination
         String[] actives = activeSubstance.split(",");
-        // for each individual active substance in the combination of active substances
-        for (int i = 0; i < actives.length; i++) {
-            // store current active in a new variable for use in the lambda expression
-            String currentActive = actives[i];
-            // search the synonym map for matches
-            // call entrySet method to retrieve a set of key-value pairs from the map, convert the set to a stream
-            List<String> synonyms = SYNONYM_MAP.entrySet().stream()
-            // check each entry to see if the active substance matches the key or is present in the list of values for that entry
-            .filter(entry -> entry.getValue().stream()
-                // any match returns true if any value matches the active substance
-                .anyMatch(syn -> syn.equalsIgnoreCase(currentActive)))
-            // extract the list of values from the map entry
-            .map(Map.Entry::getValue)
-            // take the first matching list of values and wrap it in an optional
-            .findFirst()
-            // if no synonyms found just use the active substance originally entered
-            .orElse(List.of(currentActive));
-            // for each synonym in the list of synonyms
-            for (String synonym : synonyms) {
-                // replace the element at index i of actives with the synonym
-                actives[i] = synonym;
-                // concatenate the actives array back into a String
-                String activeCombo = String.join(", ", actives);
-                // search the database for this combination and add any results to the list
-                results.addAll(drugRepository.findAllByComboActiveSubstances(activeCombo));
+        List<String> activesList = Arrays.asList(actives);
+        // for each drug in the database
+        for(DrugEntity drug : allDrugs) {
+            // get the active substance(s)
+            String comparisonActive = drug.getActiveSubstance();
+            // split the active substance into an array of Strings on the commas
+            String[] comparisonArr = comparisonActive.split(",");
+            List<String> comparisonArrList = Arrays.asList(comparisonArr);
+            // for each active in the list of active substances from the search term,
+            // if any element in the list of active substances for comparison contains that active (allows for variations of drug salts used)
+            // return true if all actives in the list of active substances from the search term have a match
+            boolean containsAll = activesList.stream()
+                                .allMatch(active -> comparisonArrList.stream()
+                                    .anyMatch(comparison -> comparison.toLowerCase().contains(active.toLowerCase().trim()))
+                                );
+            if(containsAll) {
+                // add the drug to the results list
+                results.add(drug);
             }
-            // change element at i back to original active
-            actives[i] = currentActive;
+            // check if the activesList contains any actives which are in the synonym map (either keys or values)
+            // if so that active needs to be swapped out with each of its synonyms and each combination searched for
+            if(
+                activesList.stream().anyMatch(element -> 
+                synonymMap.containsKey(element) || 
+                synonymMap.values().stream().anyMatch(list -> list.contains(element)))
+            ) {
+                // make a copy of the activesList
+                List<String> activesSynonyms = new ArrayList<>(activesList);
+
+                // for each element in the list (each active substance)
+                for(int i = 0; i < activesSynonyms.size(); i++) {
+
+                    // hold the current element
+                    String current = activesSynonyms.get(i);
+
+                    // find if it has synonyms
+                    List<String> synonyms = synonymMap.entrySet().stream()
+                    // check each entry to see if the active substance matches the key or is present in the list of values for that entry
+                    .filter(entry -> entry.getValue().stream()
+                        // any match returns true if any value matches the active substance
+                        .anyMatch(syn -> syn.equalsIgnoreCase(current)))
+                    // extract the list of values from the map entry
+                    .map(Map.Entry::getValue)
+                    // take the first matching list of values and wrap it in an optional
+                    .findFirst()
+                    // if no synonyms found just use the active substance originally entered
+                    .orElse(List.of(current)); 
+
+                    // check if the synonyms list is longer than 1 element (i.e. the active has synonyms)
+                    if(synonyms.size() > 1) {
+                        // if so, for each synonym in the list
+                        for(String synonym : synonyms) {
+                            // replace the current element with that synonym
+                            activesSynonyms.set(i, synonym);
+                            // search for that combination
+                            if(containsAll) {
+                                // add the drug to the results list
+                                results.add(drug);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
-        // convert the final results list into a Page and return it
-        int start = (int) pageable.getOffset();
-        int end = Math.min(start + pageable.getPageSize(), results.size());
+        // instantiate list to hold filtered results
+        List<DrugEntity> filteredResults = new ArrayList<>();
 
-        if (start >= results.size()) {
-            // if start is beyond the size of the results, return an empty page
-            return new PageImpl<>(new ArrayList<>(), pageable, results.size());
+        // for each result in the results list
+        for(DrugEntity result : results) {
+            String drugActives = result.getActiveSubstance();
+            String[] drugActivesArr = drugActives.split(",");
+            // filter results to drugs containing only the same number of active ingredients as the search term
+            // this will limit results to only drugs containing exactly the same combination as the search term
+            if(drugActivesArr.length == actives.length) {
+                filteredResults.add(result);
+            }
         }
-        List<DrugEntity> pagedResults = results.subList(start, end);
 
-        return new PageImpl<DrugEntity>(pagedResults, pageable, results.size());
+        return filteredResults;
 
     }
 
@@ -189,12 +194,8 @@ public class DrugServiceImpl implements DrugService{
     }
 
     @Override
-    public Optional<DrugEntity> findByContainsProductName(String productName) {
-        List<DrugEntity> drugsList = drugRepository.findByContainsProductName(productName);
-        if (drugsList.isEmpty()) {
-            return Optional.empty();
-        }
-        return Optional.ofNullable(drugsList.getFirst());
+    public List<DrugEntity> findByContainsProductName(String productName) {
+        return drugRepository.findByContainsProductName(productName);
     }
 
     @Override

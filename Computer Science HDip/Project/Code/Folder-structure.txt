@@ -1,4 +1,4 @@
-```
+
 └── 📁src
     └── 📁main
         └── 📁java
@@ -57,31 +57,3 @@
                                 └── PharmacyServiceImpl.java
                             └── PharmacyDrugAvailabilityService.java
                             └── PharmacyService.java
-        └── 📁resources
-            └── application.properties
-            └── banner.txt
-            └── 📁static
-            └── 📁templates
-    └── 📁test
-        └── 📁java
-            └── 📁com
-                └── 📁cmcilroy
-                    └── 📁medicines_shortages_assistant
-                        └── 📁cleaner
-                            └── DatabaseCleaner.java
-                            └── 📁impl
-                                └── DatabaseCleanerImpl.java
-                        └── 📁controllers
-                            └── DrugControllerIntegrationTests.java
-                            └── PharmacyControllerIntegrationTests.java
-                            └── PharmacyDrugAvailabilityControllerIntegrationTests.java
-                        └── MedicinesShortagesAssistantApplicationTests.java
-                        └── 📁repositories
-                            └── DrugRepositoryIntegrationTests.java
-                            └── PharmacyDrugAvailabilityRepositoryIntegrationTests.java
-                            └── PharmacyRepositoryIntegrationTests.java
-                        └── TestData.java
-        └── 📁resources
-            └── application.properties
-
-```

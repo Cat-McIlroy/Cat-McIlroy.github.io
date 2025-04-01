@@ -192,10 +192,10 @@ form textarea, form input, form select {
 
 .results-table {
     width: 80%;
+    display:block;
     border-collapse: collapse;
     max-width: 100%;
     overflow-x: auto;
-    display: block;
     margin: 20px auto;
     background-color: lightgray; 
     border: 2px solid black;

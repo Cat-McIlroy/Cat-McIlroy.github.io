@@ -1,5 +1,6 @@
 package com.cmcilroy.medicines_shortages_assistant.services;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,11 +19,11 @@ public interface DrugService {
 
     Iterable<DrugEntity> findAllByIsAvailable(boolean isAvailable);
 
-    Page<DrugEntity> findAllByActiveSubstance(String activeSubstance, Pageable pageable);
+    List<DrugEntity> findAllByActiveSubstance(String activeSubstance);
 
-    Page<DrugEntity> findAllByComboActiveSubstances(String activeSubstance, Pageable pageable);
+    List<DrugEntity> findAllByComboActiveSubstances(String activeSubstance);
 
-    Optional<DrugEntity> findByContainsProductName(String productName);
+    List<DrugEntity> findByContainsProductName(String productName);
 
     Optional<DrugEntity> findByExactProductName(String productName);
     

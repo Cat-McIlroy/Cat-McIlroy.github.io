@@ -32,7 +32,7 @@ public class Product {
     @JacksonXmlProperty(localName = "ActiveSubstances")
     private List<String> activeSubstances;
 
-    // method to convert the activeSubstances List to a comma separated String
+    // method to convert the activeSubstances List to a comma separated String (CSV)
     public String getActiveSubstance() {
         if (activeSubstances == null || activeSubstances.isEmpty()) {
             return "";

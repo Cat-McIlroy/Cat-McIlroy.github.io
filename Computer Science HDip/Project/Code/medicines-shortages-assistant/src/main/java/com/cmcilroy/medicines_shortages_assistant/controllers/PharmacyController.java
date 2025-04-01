@@ -126,7 +126,7 @@ public class PharmacyController {
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                 pharmacyDto, 
                 null, 
-                List.of(new SimpleGrantedAuthority("PHARMACY_USER"))
+                List.of(new SimpleGrantedAuthority("ROLE_PHARMACY_USER"))
             );
             // store authentication in the SecurityContext
             SecurityContextHolder.getContext().setAuthentication(authToken);

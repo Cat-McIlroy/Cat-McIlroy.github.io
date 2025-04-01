@@ -16,10 +16,9 @@ public interface DrugRepository extends CrudRepository<DrugEntity, String>, Pagi
     List<DrugEntity> findAllByActiveSubstanceIgnoreCase(String activeSubstance);
 
     // find active substance containing the active substance of the entered product name
-    // this allows for variations in the order of ingredients 
-    // include results with commas as this method is looking for matches for a combination drug
+    // this allows for variations regarding the drug salts used, e.g. amlodipine besilate, amlodipine maleate etc are all amlodipine
     @Query("SELECT d FROM DrugEntity d WHERE LOWER(d.activeSubstance) LIKE LOWER(CONCAT('%', :activeSubstance, '%'))")
-    List<DrugEntity> findAllByComboActiveSubstances(String activeSubstance);
+    List<DrugEntity> findAllByContainsActiveSubstance(String activeSubstance);
 
     // find record containing the entered product name
     @Query("SELECT d FROM DrugEntity d WHERE LOWER(d.productName) LIKE LOWER(CONCAT('%', :productName, '%'))")
