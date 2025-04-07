@@ -1,7 +1,6 @@
 package com.cmcilroy.medicines_shortages_assistant.repositories;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -11,9 +10,6 @@ import com.cmcilroy.medicines_shortages_assistant.domain.entities.DrugEntity;
 
 @Repository
 public interface DrugRepository extends CrudRepository<DrugEntity, String>, PagingAndSortingRepository<DrugEntity, String>{
-    
-    // find active substance exactly matching the active substance of the entered product name (no commas)
-    List<DrugEntity> findAllByActiveSubstanceIgnoreCase(String activeSubstance);
 
     // find active substance containing the active substance of the entered product name
     // this allows for variations regarding the drug salts used, e.g. amlodipine besilate, amlodipine maleate etc are all amlodipine
@@ -24,10 +20,6 @@ public interface DrugRepository extends CrudRepository<DrugEntity, String>, Pagi
     @Query("SELECT d FROM DrugEntity d WHERE LOWER(d.productName) LIKE LOWER(CONCAT('%', :productName, '%'))")
     List<DrugEntity> findByContainsProductName(String productName);
 
-    // find record matching the exact entered product name
-    // @Query("SELECT d FROM DrugEntity d WHERE LOWER(d.productName) = LOWER(:productName)")
-    Optional<DrugEntity> findByProductName(String productName);
-
-    // find all records with by availability
+    // find all records by availability
     Iterable<DrugEntity> findAllByIsAvailable(boolean isAvailable);
 }

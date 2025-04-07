@@ -42,7 +42,6 @@ public class DrugsUpdateServiceImpl implements DrugsUpdateService {
         this.drugRepository = drugRepository;
     }
 
-
     // run initial update of database when application starts up
     @PostConstruct
     public void initialUpdate() {

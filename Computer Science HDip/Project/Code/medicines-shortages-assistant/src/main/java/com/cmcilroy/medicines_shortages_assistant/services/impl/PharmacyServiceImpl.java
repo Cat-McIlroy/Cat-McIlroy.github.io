@@ -11,6 +11,7 @@ import com.cmcilroy.medicines_shortages_assistant.domain.dto.AccountCredentialsD
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.PharmacyEntity;
 import com.cmcilroy.medicines_shortages_assistant.repositories.PharmacyRepository;
 import com.cmcilroy.medicines_shortages_assistant.scrapers.WebScraper;
+import com.cmcilroy.medicines_shortages_assistant.services.PharmacyDrugAvailabilityService;
 import com.cmcilroy.medicines_shortages_assistant.services.PharmacyService;
 
 import jakarta.transaction.Transactional;
@@ -21,6 +22,9 @@ public class PharmacyServiceImpl implements PharmacyService{
     // inject Repositories
     private PharmacyRepository pharmacyRepository;
 
+    // inject PharmacyDrugAvailabilityService
+    private PharmacyDrugAvailabilityService pharmacyDrugAvailabilityService;
+
     // inject WebScraper
     private WebScraper webScraper;
 
@@ -30,9 +34,11 @@ public class PharmacyServiceImpl implements PharmacyService{
     // constructor injection
     public PharmacyServiceImpl(
         PharmacyRepository pharmacyRepository, 
+        PharmacyDrugAvailabilityService pharmacyDrugAvailabilityService,
         WebScraper webScraper,
         PasswordEncoder passwordEncoder) {
             this.pharmacyRepository = pharmacyRepository;
+            this.pharmacyDrugAvailabilityService = pharmacyDrugAvailabilityService;
             this.webScraper = webScraper;
             this.passwordEncoder = passwordEncoder;
     }
@@ -120,7 +126,7 @@ public class PharmacyServiceImpl implements PharmacyService{
         }
         // update password if different from existing password and not empty string
         if(!passwordEncoder.matches(record.getPassword(), pharmacy.getPassword()) && !pharmacy.getPassword().equalsIgnoreCase("")) {
-            record.setPassword(pharmacy.getPassword());
+            record.setPassword(passwordEncoder.encode(pharmacy.getPassword()));
         }
         // do not support update of PSI Registration Number, Address, or Eircode, as these should stay constant
         // if either of these properties change, this would be a new different pharmacy and should be a new record
@@ -145,6 +151,8 @@ public class PharmacyServiceImpl implements PharmacyService{
             throw new BadCredentialsException("Incorrect password. Please try again.");
         }
 
+        // delete any associated stock availability listings
+        pharmacyDrugAvailabilityService.deleteAllByPharmacy(pharmacy);
         // delete pharmacy record from database
         pharmacyRepository.deleteById(pharmacy.getPsiRegNo());
 
@@ -156,51 +164,5 @@ public class PharmacyServiceImpl implements PharmacyService{
     public boolean isPresent(Integer psiRegNo) {
         return pharmacyRepository.existsById(psiRegNo);
     }
-
-    /////////////////////////////////////////////////// CURRENTLY UNUSED METHODS ///////////////////////////////////////////////////////
-
-    // @Override
-    // public PharmacyEntity updatePharmacy(Integer psiRegNo, PharmacyEntity pharmacy) {
-    //     // ensure the psiRegNo associated with the pharmacy object to be updated is the same as the psiRegNo in the URL
-    //     pharmacy.setPsiRegNo(psiRegNo);
-    //     // save returns an Entity by default
-    //     return pharmacyRepository.save(pharmacy);
-    // }
-
-    // method to populate the database with a set of fictional pharmacies, for app demonstration purposes
-    // @Override
-    // @PostConstruct
-    // public void initialUpdate() {
-    
-    //     // clear database from any previous application runs
-    //     pharmacyDrugAvailabilityRepository.deleteAll();
-    //     pharmacyRepository.deleteAll();
-
-    //     Random random = new Random();
-    //     // build pharmacies called Pharmacy A through Pharmacy Z
-    //     // ascii codes 65 through 90
-    //     for(int i = 65; i <= 90; i++) {
-    //         PharmacyEntity pharmacy = PharmacyEntity.builder()
-    //                 // generate a random Integer to use as the psiRegNo
-    //                 .psiRegNo(Integer.valueOf(random.nextInt(10000) + 1000))
-    //                 .pharmacyName("Pharmacy " + (char) i)
-    //                 .eircode(String.valueOf((char) i).repeat(7))
-    //                 // generate a random phone number starting with 01
-    //                 .phoneNo(String.format("01%d %03d %04d", random.nextInt(900) + 100, random.nextInt(900) + 100, random.nextInt(10000)))
-    //                 .build();
-    //         // save the pharmacy to the database
-    //         pharmacyRepository.save(pharmacy);
-    //     }
-    // }
-
-    // @Override
-    // public Page<PharmacyEntity> findAll(Pageable pageable) {
-    //     return pharmacyRepository.findAll(pageable);
-    // }
-
-    // @Override
-    // public Optional<PharmacyEntity> findOne(Integer psiRegNo) {
-    //     return pharmacyRepository.findById(psiRegNo);
-    // }
 
 }

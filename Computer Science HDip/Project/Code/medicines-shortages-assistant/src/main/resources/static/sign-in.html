@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Sign In</title>
+    <link rel="stylesheet" href="styles/style.css"/>
+    <script src="scripts/sign-in.js"></script>
+</head>
+<body>
+    <header>
+        <div class="sign-in-out">
+            <a href="sign-in.html">Sign in</a>
+        </div>
+        <div class="logo" onclick="window.location.href='index.html';">
+            <h1>Medicines Shortages Assistant</h1>
+            <img src="pill.jpeg" alt="Image of a red and white capsule">
+        </div>
+    </header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="search-availabilities.html">Search for Stock Availability</a>
+        <a href="search-product-name.html">Search by Product Name</a>
+        <a href="search-active-ingredient.html">Search by Active Ingredient</a>
+    </nav>
+    <div id="message-container">
+        <!-- Div to hold success/error message, inserted dynamically using JavaScript -->
+    </div>
+    <div class="sign-in-form">
+        <p>Please enter login details below:</p>
+        <form>
+            <label for="email" class="red-asterisk">Email</label><br>
+            <input type="email", id="email", name="email" required><br>
+            <label for="password" class="red-asterisk">Password</label><br>
+            <input type="password", id="password", name="password" required>
+            
+            <div class="form-buttons">
+                <button type="submit">
+                    Sign in
+                </button>
+                <p>Don't yet have an account with us? Register below (PSI registered pharmacies only)</p>
+                <button type="button" onclick="location.href='registration.html';">
+                    Register
+                </button>
+            </div>
+        </form>
+    </div>
+    <footer>
+        <div>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </div>
+        <p>&copy; 2025 Medicines Shortages Assistant</p>
+    </footer>
+</body>
+</html>

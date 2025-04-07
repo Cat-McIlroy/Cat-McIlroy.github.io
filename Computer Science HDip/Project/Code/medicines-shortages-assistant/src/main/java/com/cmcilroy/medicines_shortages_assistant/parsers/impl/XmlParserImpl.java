@@ -21,21 +21,21 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 @Component
 public class XmlParserImpl implements XmlParser {
 
-    // inject product mapper
+    // inject product mapper and XmlMapper
     private Mapper<Product, DrugDto> productMapper;
     private XmlMapper xmlMapper;
 
     public XmlParserImpl(Mapper<Product, DrugDto> productMapper){
         this.productMapper = productMapper;
         this.xmlMapper = new XmlMapper();
-        // configure XmlMapper to ignore unrecognised properties
+        // configure XmlMapper to ignore unrecognised properties (e.g. properties not included in the Product or Interchangeable classes respectively)
         xmlMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     @Override
     public List<DrugDto> parseDrugData() {
 
-        // specify files
+        // specify files to be parsed
         File authorisedMedicines = new File(System.getProperty("user.dir") + "/latestHumanlist.xml");
         File interchangeablesList = new File(System.getProperty("user.dir") + "/latestInterchangeableslist.xml");
 
@@ -89,7 +89,7 @@ public class XmlParserImpl implements XmlParser {
     @Override
     public List<DrugDto> parseWithdrawnList() {
     
-        // specify file
+        // specify file to be parsed
         File withdrawnList = new File(System.getProperty("user.dir") + "/withdrawnHumanlist.xml");
 
         // use ArrayList to hold list of DrugDto's

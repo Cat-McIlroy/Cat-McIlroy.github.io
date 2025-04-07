@@ -2,6 +2,10 @@ package com.cmcilroy.medicines_shortages_assistant.controllers;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -14,26 +18,29 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.cmcilroy.medicines_shortages_assistant.domain.dto.PharmacyDrugAvailabilityDto;
 import com.cmcilroy.medicines_shortages_assistant.domain.dto.PharmacyDto;
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.DrugEntity;
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.PharmacyDrugAvailabilityEntity;
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.PharmacyEntity;
 import com.cmcilroy.medicines_shortages_assistant.mappers.Mapper;
+import com.cmcilroy.medicines_shortages_assistant.paginators.Paginator;
 import com.cmcilroy.medicines_shortages_assistant.services.DrugService;
 import com.cmcilroy.medicines_shortages_assistant.services.PharmacyDrugAvailabilityService;
 
 @RestController
 public class PharmacyDrugAvailabilityController {
 
-    // inject PharmacyDrugAvailabilityService and Mapper
+    // inject PharmacyDrugAvailabilityService, DrugService, Mappers and Paginator
     private PharmacyDrugAvailabilityService pharmacyDrugAvailabilityService;
 
-    // inject DrugService
     private DrugService drugService;
 
     private Mapper<PharmacyDrugAvailabilityEntity, PharmacyDrugAvailabilityDto> pharmacyDrugAvailabilityMapper;
     private Mapper<PharmacyEntity, PharmacyDto> pharmacyMapper;
+
+    private Paginator<PharmacyDrugAvailabilityDto> paginator;
 
     // constructor injection
     public PharmacyDrugAvailabilityController(
@@ -41,12 +48,14 @@ public class PharmacyDrugAvailabilityController {
         Mapper<PharmacyDrugAvailabilityEntity, 
         PharmacyDrugAvailabilityDto> pharmacyDrugAvailabilityMapper,
         Mapper<PharmacyEntity, PharmacyDto> pharmacyMapper,
-        DrugService drugService
+        DrugService drugService,
+        Paginator<PharmacyDrugAvailabilityDto> paginator
         ) {
         this.pharmacyDrugAvailabilityService = pharmacyDrugAvailabilityService;
         this.pharmacyDrugAvailabilityMapper = pharmacyDrugAvailabilityMapper;
         this.pharmacyMapper = pharmacyMapper;
         this.drugService = drugService;
+        this.paginator = paginator;
     }
 
     //////////////////////////////////////////////////////// ALL USERS //////////////////////////////////////////////////////////////
@@ -71,7 +80,7 @@ public class PharmacyDrugAvailabilityController {
 
     //////////////////////////////////////////////// PHARMACY USERS ONLY ////////////////////////////////////////////////////////////
 
-    ////////////////////////////////////////// VIEW ALL EXISTING PHARMACY STOCK AVAILABILITY LISTINGS ////////////////////////////////////////
+    ////////////////////////////////////////// VIEW EXISTING STOCK AVAILABILITY LISTINGS ////////////////////////////////////////
 
     // GET method to return a paginated list of all pharmacy drug availabilities associated with the current pharmacy user
     @GetMapping(path = "/pharmacy-drug-availabilities/view-all")
@@ -81,14 +90,18 @@ public class PharmacyDrugAvailabilityController {
         PharmacyDto pharmacyDto = (PharmacyDto) authentication.getPrincipal();
         // map the pharmacy dto to a pharmacy entity
         PharmacyEntity pharmacy = pharmacyMapper.mapFrom(pharmacyDto);
-        // retrieve all pharmacy drug availability listings associated with the current authenticated user and return as paginated list
-        Page<PharmacyDrugAvailabilityEntity> availabilities = pharmacyDrugAvailabilityService.findAllByPharmacy(pharmacy, pageable);
-        // if list is empty, return HTTP No Content
+        // retrieve all pharmacy drug availability listings associated with the current authenticated user and return as a list
+        List<PharmacyDrugAvailabilityEntity> availabilities = pharmacyDrugAvailabilityService.findAllByPharmacy(pharmacy);
+        // if list is empty, return HTTP 204 No Content
         if (availabilities.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         // otherwise map entities to dto objects and return with HTTP 200 OK
-        return new ResponseEntity<>(availabilities.map(pharmacyDrugAvailabilityMapper::mapTo), HttpStatus.OK);
+        List<PharmacyDrugAvailabilityDto> dtos = StreamSupport.stream(availabilities.spliterator(), false)
+                                    .map(pharmacyDrugAvailabilityMapper::mapTo)
+                                    .collect(Collectors.toList());
+
+        return new ResponseEntity<>(paginator.paginate(dtos, pageable), HttpStatus.OK);
     }
 
     ///////////////////////////////////////// CREATE A NEW STOCK AVAILABILITY LISTING ////////////////////////////////////////////////
@@ -97,8 +110,7 @@ public class PharmacyDrugAvailabilityController {
     @PostMapping(path = "/pharmacy-drug-availabilities/create")
     public ResponseEntity<PharmacyDrugAvailabilityDto> createPharmacyDrugAvailability(
         @RequestParam String licenceNo,
-        @RequestParam boolean isAvailable,
-        Pageable pageable
+        @RequestParam boolean isAvailable
     ) {
         // get the pharmacy dto object from the pharmacy user currently signed in
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -138,65 +150,5 @@ public class PharmacyDrugAvailabilityController {
         // return HTTP 204 No Content
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-    /////////////////////////////////////////////////// CURRENTLY UNUSED ENDPOINTS ///////////////////////////////////////////////////////
-
-
-    ///////////////////////////////////////// MODIFY AN EXISTING STOCK AVAILABILITY LISTING ///////////////////////////////////////////////
-
-    // PATCH method to partially update a specific pharmacy drug availability
-    // @PatchMapping(path = "/pharmacy-drug-availabilities/update/{id}")
-    // public ResponseEntity<PharmacyDrugAvailabilityDto> updatePharmacyDrugAvailability(
-    //     @PathVariable("id") Long id,
-    //     @RequestParam boolean isAvailable
-    // ) {
-    //     // if the specified pharmacy drug availability does not exist in the database
-    //     if(!pharmacyDrugAvailabilityService.isPresent(id)){
-    //         // return a HTTP 404 Not Found 
-    //         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    //     }
-    //     // call partial update method of pharmacy drug availability service, passing in id and updated availability status
-    //     PharmacyDrugAvailabilityEntity updatedPharmacyDrugAvailabilityEntity = 
-    //     pharmacyDrugAvailabilityService.updateAvailability(id, isAvailable);
-    //     // map the updated entity back to a dto and return this object inside a ResponseEntity with a HTTP 200 Ok 
-    //     return new ResponseEntity<>(pharmacyDrugAvailabilityMapper.mapTo(updatedPharmacyDrugAvailabilityEntity), HttpStatus.OK);
-    // }
-
-    // GET method to return one pharmacy drug availability by Id
-    // @GetMapping(path = "/pharmacy-drug-availabilities/{id}")
-    // public ResponseEntity<PharmacyDrugAvailabilityDto> getPharmacyDrugAvailability(@PathVariable("id") Long id) {
-    //     Optional<PharmacyDrugAvailabilityEntity> foundAvailability = pharmacyDrugAvailabilityService.findOne(id);
-    //     if(foundAvailability.isPresent()){
-    //         PharmacyDrugAvailabilityEntity pharmacyDrugAvailabilityEntity = foundAvailability.get();
-    //         PharmacyDrugAvailabilityDto pharmacyDrugAvailabilityDto = pharmacyDrugAvailabilityMapper.mapTo(pharmacyDrugAvailabilityEntity);
-    //         return new ResponseEntity<>(pharmacyDrugAvailabilityDto, HttpStatus.OK);
-    //     }
-    //     else{
-    //         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    //     }
-    // }
-
-    // // PUT method to fully update a specific pharmacy drug availability
-    // @PutMapping(path = "/pharmacy-drug-availabilities/{id}")
-    // public ResponseEntity<PharmacyDrugAvailabilityDto> fullUpdatePharmacyDrugAvailability(
-    //     @PathVariable("id") Long id,
-    //     @RequestBody PharmacyDrugAvailabilityDto pharmacyDrugAvailabilityDto
-    // ) {
-    //     // if the specified pharmacy drug availability does not exist in the database
-    //     if(!pharmacyDrugAvailabilityService.isPresent(id)){
-    //         // return a HTTP 404 Not Found 
-    //         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    //     }
-    //     // set id of pharmacyDrugAvailabilityDto to be id in URL path, to ensure consistency
-    //     pharmacyDrugAvailabilityDto.setId(id);
-    //     // map to entity
-    //     PharmacyDrugAvailabilityEntity pharmacyDrugAvailabilityEntity = 
-    //     pharmacyDrugAvailabilityMapper.mapFrom(pharmacyDrugAvailabilityDto);
-    //     // save entity to database
-    //     PharmacyDrugAvailabilityEntity savedPharmacyDrugAvailabilityEntity = 
-    //     pharmacyDrugAvailabilityService.savePharmacyDrugAvailability(pharmacyDrugAvailabilityEntity);
-    //     // map the saved entity back to a dto and return this object inside a ResponseEntity with a HTTP 200 Ok 
-    //     return new ResponseEntity<>(pharmacyDrugAvailabilityMapper.mapTo(savedPharmacyDrugAvailabilityEntity), HttpStatus.OK);
-    // }
 
 }

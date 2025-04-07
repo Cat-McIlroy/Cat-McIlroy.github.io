@@ -1,6 +1,7 @@
 package com.cmcilroy.medicines_shortages_assistant.services;
 
-import java.util.Optional;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -12,23 +13,13 @@ public interface PharmacyDrugAvailabilityService {
 
     PharmacyDrugAvailabilityEntity savePharmacyDrugAvailability(PharmacyDrugAvailabilityEntity pharmacyDrugAvailability);
 
-    Page<PharmacyDrugAvailabilityEntity> findAll(Pageable pageable);
-
-    Optional<PharmacyDrugAvailabilityEntity> findOne(Long id);
-
-    boolean isPresent(Long id);
-
     boolean existsByPharmacyAndDrug(PharmacyEntity pharmacy, DrugEntity drug);
-
-    PharmacyDrugAvailabilityEntity updateAvailability(Long id, boolean isAvailable);
 
     void delete(Long id);
 
-    // void initialUpdate();
-
     Page<PharmacyDrugAvailabilityEntity> findAllByLicenceNo(String licenceNo, Pageable pageable);
 
-    Page<PharmacyDrugAvailabilityEntity> findAllByPharmacy(PharmacyEntity pharmacy, Pageable pageable);
+    List<PharmacyDrugAvailabilityEntity> findAllByPharmacy(PharmacyEntity pharmacy);
 
     void deleteAllByPharmacy(PharmacyEntity pharmacy);
 

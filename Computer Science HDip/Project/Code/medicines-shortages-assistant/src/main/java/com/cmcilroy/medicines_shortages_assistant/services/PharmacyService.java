@@ -13,16 +13,8 @@ public interface PharmacyService {
 
     PharmacyEntity updatePharmacy(String password, PharmacyEntity pharmacy);
 
-    // Page<PharmacyEntity> findAll(Pageable pageable);
-
-    // Optional<PharmacyEntity> findOne(Integer psiRegNo);
-
     boolean isPresent(Integer psiRegNo);
 
-    // PharmacyEntity partialUpdate(Integer psiRegNo, PharmacyEntity pharmacy);
-
     void delete(String password, PharmacyEntity pharmacy);
-
-    // void initialUpdate();
 
 }

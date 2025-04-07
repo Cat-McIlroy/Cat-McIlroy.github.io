@@ -1,5 +1,7 @@
 package com.cmcilroy.medicines_shortages_assistant.repositories;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
@@ -18,7 +20,7 @@ PagingAndSortingRepository<PharmacyDrugAvailabilityEntity, Long> {
     Page<PharmacyDrugAvailabilityEntity> findAllByDrug_LicenceNo(String licenceNo, Pageable pageable);
 
     // find records associated with the entered pharmacy object
-    Page<PharmacyDrugAvailabilityEntity> findAllByPharmacy(PharmacyEntity pharmacy, Pageable pageable);
+    List<PharmacyDrugAvailabilityEntity> findAllByPharmacy(PharmacyEntity pharmacy);
 
     // find existing records for specific pharmacy and drug combination
     boolean existsByPharmacyAndDrug(PharmacyEntity pharmacy, DrugEntity drug);

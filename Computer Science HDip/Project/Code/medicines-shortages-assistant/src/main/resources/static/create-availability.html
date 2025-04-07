@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Stock Availability</title>
+    <link rel="stylesheet" href="styles/style.css"/>
+    <script src="scripts/check-auth.js"></script>
+    <script src="scripts/populate-shorts-list.js"></script>
+    <script src="scripts/create-availability.js"></script>
+</head>
+<body>
+    <header>
+        <div class="sign-in-out" id="sign-in-out">
+            <a href="sign-in.html" id="sign-in-out-link">Sign in</a>
+        </div>
+        <div class="logo" onclick="window.location.href='index.html';">
+            <h1>Medicines Shortages Assistant</h1>
+            <img src="pill.jpeg" alt="Image of a red and white capsule">
+        </div>
+    </header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="search-availabilities.html">Search for Stock Availability</a>
+        <a href="search-product-name.html">Search by Product Name</a>
+        <a href="search-active-ingredient.html">Search by Active Ingredient</a>
+    </nav>
+    <div class="dropdown-form">
+        <p>Select a product from the list of shortages to add a new availability listing for your pharmacy:</p>
+        <form id="add-availability">
+            <select id="shorts" name="shorts"></select>
+            <div class="form-buttons">
+                <button type="submit">
+                    Add
+                </button>
+                <button type="button" onclick="location.href='account-dashboard.html';">Back</button>
+            </div>
+        </form>
+    </div>
+    <div id="message-container">
+        <!-- Div to hold success/error message, inserted dynamically using JavaScript -->
+    </div>
+    <footer>
+        <div>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </div>
+        <p>&copy; 2025 Medicines Shortages Assistant</p>
+    </footer>
+</body>
+</html>

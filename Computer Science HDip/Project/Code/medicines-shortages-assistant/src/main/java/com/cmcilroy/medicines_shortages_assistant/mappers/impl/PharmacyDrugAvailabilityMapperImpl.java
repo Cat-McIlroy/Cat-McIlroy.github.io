@@ -6,7 +6,8 @@ import com.cmcilroy.medicines_shortages_assistant.domain.dto.PharmacyDrugAvailab
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.PharmacyDrugAvailabilityEntity;
 import com.cmcilroy.medicines_shortages_assistant.mappers.Mapper;
 
-@Component // to allow this class to be injected elsewhere
+// Component annotation allows this class to be injected elsewhere
+@Component
 public class PharmacyDrugAvailabilityMapperImpl implements Mapper<PharmacyDrugAvailabilityEntity, PharmacyDrugAvailabilityDto> {
 
     // inject ModelMapper

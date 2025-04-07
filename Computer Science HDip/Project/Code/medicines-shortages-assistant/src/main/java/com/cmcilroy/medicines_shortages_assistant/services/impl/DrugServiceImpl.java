@@ -2,11 +2,12 @@ package com.cmcilroy.medicines_shortages_assistant.services.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.Set;
+
 import org.springframework.stereotype.Service;
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.DrugEntity;
 import com.cmcilroy.medicines_shortages_assistant.repositories.DrugRepository;
@@ -23,34 +24,25 @@ public class DrugServiceImpl implements DrugService{
         "aspirin", List.of(
             "aspirin",
             "acetylsalicylic acid",
-            "acetylsalicilic acid",
-            "asa",
-            "2-(acetyloxy)benzoic acid",
-            "salicylic acid acetate"
+            "acetyl salicylic acid",
+            "acetylsalicilic acid"
         ),
         "paracetamol", List.of(
             "paracetamol",
             "acetaminophen"
-        )
-        
+        ),
+        "hydrochlorothiazide", List.of(
+            "hydrochlorothiazide",
+            "HCTZ"
+        ),
+        "folic acid", List.of(
+            "folic acid",
+            "folate"
+        )   
     );
 
     public DrugServiceImpl(DrugRepository drugRepository) {
         this.drugRepository = drugRepository;
-    }
-
-    // pass-through method. The Service layer is taking the Entity and passing it to the Repository which persists it in the database
-    @Override
-    public DrugEntity saveDrug(String licenceNo, DrugEntity drug) {
-        // ensure the licenceNo associated with the drug object to be saved is the same as the licenceNo in the URL
-        drug.setLicenceNo(licenceNo);
-        // save returns an Entity by default
-        return drugRepository.save(drug);
-    }
-
-    @Override
-    public Page<DrugEntity> findAll(Pageable pageable) {
-        return drugRepository.findAll(pageable);
     }
 
     @Override
@@ -74,7 +66,7 @@ public class DrugServiceImpl implements DrugService{
             // if no synonyms found just use the active substance originally entered
             .orElse(List.of(activeSubstance)); 
 
-        List<DrugEntity> results = new ArrayList<>();
+        Set<DrugEntity> results = new HashSet<>();
         // for each synonym in the list of synonyms
         for (String synonym : synonyms) {
             // search the database using that active ingredient and add results to the list
@@ -100,7 +92,7 @@ public class DrugServiceImpl implements DrugService{
     @Override
     public List<DrugEntity> findAllByComboActiveSubstances(String activeSubstance) {
         // list to hold the search results
-        List<DrugEntity> results = new ArrayList<>();
+        Set<DrugEntity> results = new HashSet<>();
         // retrieve all records from the database drugs table
         Iterable<DrugEntity> allDrugs = findAll();
         // split the activeSubstance string into an array of Strings on the commas, to get an array of the active substances in the combination
@@ -159,8 +151,15 @@ public class DrugServiceImpl implements DrugService{
                         for(String synonym : synonyms) {
                             // replace the current element with that synonym
                             activesSynonyms.set(i, synonym);
+                            // for each active in the synonym-swapped list of active substances from the search term,
+                            // if any element in the list of active substances for comparison contains that active (allows for variations of drug salts used)
+                            // return true if all actives in the list of active substances from the search term have a match
+                            boolean containsAllSynonyms = activesSynonyms.stream()
+                                .allMatch(activeSynonym -> comparisonArrList.stream()
+                                    .anyMatch(comparison -> comparison.toLowerCase().contains(activeSynonym.toLowerCase().trim()))
+                                );
                             // search for that combination
-                            if(containsAll) {
+                            if(containsAllSynonyms) {
                                 // add the drug to the results list
                                 results.add(drug);
                             }
@@ -173,7 +172,7 @@ public class DrugServiceImpl implements DrugService{
         // instantiate list to hold filtered results
         List<DrugEntity> filteredResults = new ArrayList<>();
 
-        // for each result in the results list
+        // for each result in the results set
         for(DrugEntity result : results) {
             String drugActives = result.getActiveSubstance();
             String[] drugActivesArr = drugActives.split(",");
@@ -199,39 +198,8 @@ public class DrugServiceImpl implements DrugService{
     }
 
     @Override
-    public Optional<DrugEntity> findByExactProductName(String productName) {
-            return drugRepository.findByProductName(productName);
-    }
-
-    @Override
     public Iterable<DrugEntity> findAllByIsAvailable(boolean isAvailable) {
         return drugRepository.findAllByIsAvailable(isAvailable);
-    }
-
-    @Override
-    public boolean isPresent(String licenceNo) {
-        return drugRepository.existsById(licenceNo);
-    }
-
-    @Override
-    public DrugEntity partialUpdate(String licenceNo, DrugEntity drug) {
-        // make sure licenceNo of the drug entity passed in is the same as the licenceNo in the URL
-        drug.setLicenceNo(licenceNo);
-        // retrieve record from the database
-        return drugRepository.findById(licenceNo).map(existingRecord -> {
-            // update product name (useful in the case of a re-brand)
-            Optional.ofNullable(drug.getProductName()).ifPresent(existingRecord::setProductName);
-            // update product availability 
-            Optional.ofNullable(drug.getIsAvailable()).ifPresent(existingRecord::setIsAvailable);
-            // do not support partial update of licence number, active substance or strength, as these should stay constant
-            // if the active substance or strength changed, this would be a different product with a different licence number
-            return drugRepository.save(existingRecord);
-        }).orElseThrow(() -> new RuntimeException("Record does not exist."));
-    }
-
-    @Override
-    public void delete(String licenceNo) {
-        drugRepository.deleteById(licenceNo);
     }
     
 }

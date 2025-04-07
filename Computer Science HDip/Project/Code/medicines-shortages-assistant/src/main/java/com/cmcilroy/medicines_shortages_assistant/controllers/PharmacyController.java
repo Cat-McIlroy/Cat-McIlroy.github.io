@@ -25,7 +25,6 @@ import com.cmcilroy.medicines_shortages_assistant.domain.dto.EditAccountDto;
 import com.cmcilroy.medicines_shortages_assistant.domain.dto.PharmacyDto;
 import com.cmcilroy.medicines_shortages_assistant.domain.entities.PharmacyEntity;
 import com.cmcilroy.medicines_shortages_assistant.mappers.Mapper;
-import com.cmcilroy.medicines_shortages_assistant.services.PharmacyDrugAvailabilityService;
 import com.cmcilroy.medicines_shortages_assistant.services.PharmacyService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,21 +33,16 @@ import jakarta.servlet.http.HttpSession;
 @RestController
 public class PharmacyController {
 
-    // inject PharmacyService, PharmacyDrugAvailabilityService and Mapper
+    // inject PharmacyService and Mapper
     private PharmacyService pharmacyService;
-    private PharmacyDrugAvailabilityService pharmacyDrugAvailabilityService;
 
     private Mapper<PharmacyEntity, PharmacyDto> pharmacyMapper;
 
     // constructor injection
-    public PharmacyController(PharmacyService pharmacyService, 
-    Mapper<PharmacyEntity, PharmacyDto> pharmacyMapper,
-    PharmacyDrugAvailabilityService pharmacyDrugAvailabilityService) {
+    public PharmacyController(PharmacyService pharmacyService, Mapper<PharmacyEntity, PharmacyDto> pharmacyMapper) {
         this.pharmacyService = pharmacyService;
         this.pharmacyMapper = pharmacyMapper;
-        this.pharmacyDrugAvailabilityService = pharmacyDrugAvailabilityService;
     }
-
 
     //////////////////////////////////////////////////////// ALL USERS //////////////////////////////////////////////////////////////
 
@@ -214,8 +208,6 @@ public class PharmacyController {
         // get the pharmacy dto object from the pharmacy user currently signed in
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         PharmacyDto pharmacyDto = (PharmacyDto) authentication.getPrincipal();
-        // delete any associated stock availability listings
-        pharmacyDrugAvailabilityService.deleteAllByPharmacy(pharmacyMapper.mapFrom(pharmacyDto));
         
         try{
             pharmacyService.delete(password, pharmacyMapper.mapFrom(pharmacyDto));
@@ -234,28 +226,5 @@ public class PharmacyController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
-
-    /////////////////////////////////////////////////// CURRENTLY UNUSED ENDPOINTS ///////////////////////////////////////////////////////
-
-    // // GET method to return a paginated list of all pharmacies contained in the database
-    // @GetMapping(path = "/pharmacies")
-    // public Page<PharmacyDto> listAllPharmacies(Pageable pageable) {
-    //     Page<PharmacyEntity> pharmacies = pharmacyService.findAll(pageable);
-    //     return pharmacies.map(pharmacyMapper::mapTo);
-    // }
-
-    // // GET method to return pharmacy by psiRegNo
-    // @GetMapping(path = "/pharmacies/{psiRegNo}")
-    // public ResponseEntity<PharmacyDto> getPharmacy(@PathVariable("psiRegNo") Integer psiRegNo) {
-    //     Optional<PharmacyEntity> foundPharmacy = pharmacyService.findOne(psiRegNo);
-    //     if(foundPharmacy.isPresent()){
-    //         PharmacyEntity pharmacyEntity = foundPharmacy.get();
-    //         PharmacyDto pharmacyDto = pharmacyMapper.mapTo(pharmacyEntity);
-    //         return new ResponseEntity<>(pharmacyDto, HttpStatus.OK);
-    //     }
-    //     else{
-    //         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    //     }
-    // }
 
 }

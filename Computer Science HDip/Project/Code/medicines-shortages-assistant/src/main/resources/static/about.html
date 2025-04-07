@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About</title>
+    <link rel="stylesheet" href="styles/style.css"/>
+    <script src="scripts/check-auth.js"></script>
+</head>
+<body>
+    <header>
+        <div class="sign-in-out" id="sign-in-out">
+            <a href="index.html" id="sign-in-out-link">Sign out</a>
+        </div>
+        <div class="logo" onclick="window.location.href='index.html';">
+            <h1>Medicines Shortages Assistant</h1>
+            <img src="pill.jpeg" alt="Image of a red and white capsule">
+        </div>
+    </header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="search-availabilities.html">Search for Stock Availability</a>
+        <a href="search-product-name.html">Search by Product Name</a>
+        <a href="search-active-ingredient.html">Search by Active Ingredient</a>
+    </nav>
+    <div id="message-container">
+        <!-- Div to hold success/error message, inserted dynamically using JavaScript -->
+    </div>
+    <div class="about">
+        <h2>About the Medicines Shortages Assistant</h2>
+        <p>
+            This application was developed by a PSI registered pharmacist with 11 years experience in the Irish community pharmacy sector. It is a free, publicly available tool which allows users to identify therapeutic alternatives to medications currently in short supply, or locate available pharmacy stock of same.<br><br>
+            The aim of the application is to alleviate the ongoing problems caused by medicines shortages in Ireland.
+            The hope is that this application will aid both patients and pharmacists, by making it easier for patients to source their prescribed medications, and reducing pharmacist workload by decreasing the volume of calls to pharmacies regarding medication shortages queries.<br><br>
+        </p>
+        <button type="button" onclick="window.history.back();">Back</button>
+    </div>
+    <footer>
+        <div>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </div>
+        <p>&copy; 2025 Medicines Shortages Assistant</p>
+    </footer>
+</body>
+</html>

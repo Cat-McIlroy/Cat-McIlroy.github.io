@@ -34,12 +34,12 @@ public final class TestData {
 
     public static DrugEntity createTestDrugB() {
         return DrugEntity.builder()
-                    .licenceNo("PA2242/013/003")
-                    .productName("Nexium 40 mg gastro-resistant tablets")
-                    .manufacturer("Grunenthal Pharma Ltd")
-                    .strength("40 mg")
-                    .dosageForm("Gastro-resistant tablet")
-                    .activeSubstance("Esomeprazole")
+                    .licenceNo("PA0865/017/001")
+                    .productName("Konverge 20 mg/5 mg film-coated tablets")
+                    .manufacturer("Menarini International Operations Luxembourg S.A.")
+                    .strength("20 mg/5 mg")
+                    .dosageForm("Film-coated tablet")
+                    .activeSubstance("Olmesartan medoxomil, Amlodipine")
                     .isAvailable(true)
                     .build();
     }
@@ -54,21 +54,57 @@ public final class TestData {
                     .activeSubstance("Semaglutide")
                     .isAvailable(false)
                     .build();
-    }    
+    }
 
     public static DrugEntity createTestDrugD() {
         return DrugEntity.builder()
-                    .licenceNo("PA0749/067/002")
-                    .productName("Amlodipine Teva 10 mg Tablets")
-                    .manufacturer("Teva Pharma B.V")
-                    .strength("10 mg")
-                    .dosageForm("Tablet")
-                    .activeSubstance("Amlodipine")
+                    .licenceNo("PA1410/037/001")
+                    .productName("Aspirin 300mg Effervescent tablets")
+                    .manufacturer("Bayer Limited")
+                    .strength("300mg")
+                    .dosageForm("Effervescent tablet")
+                    .activeSubstance("Aspirin")
+                    .isAvailable(true)
+                    .build();
+    }      
+
+    public static DrugEntity createTestDrugE() {
+        return DrugEntity.builder()
+                    .licenceNo("PA2315/189/001")
+                    .productName("Nuprin 75mg gastro-resistant tablets")
+                    .manufacturer("Accord Healthcare Ireland Ltd.")
+                    .strength("75mg")
+                    .dosageForm("Gastro-resistant tablet")
+                    .activeSubstance("Acetylsalicylic acid")
+                    .isAvailable(true)
+                    .build();
+    }   
+
+    public static DrugEntity createTestDrugF() {
+        return DrugEntity.builder()
+                    .licenceNo("PA1744/002/003")
+                    .productName("Trinomia 100 mg/20 mg/10 mg hard capsules")
+                    .manufacturer("Ferrer Internacional, S.A")
+                    .strength("100 mg/20 mg/10 mg")
+                    .dosageForm("Capsule, hard")
+                    .activeSubstance("Acetylsalicylic acid, Ramipril, Atorvastatin calcium trihydrate")
                     .isAvailable(true)
                     .build();
     }
 
-    public static DrugEntity createTestDrugE() {
+    public static DrugEntity createTestDrugG() {
+        return DrugEntity.builder()
+                    .licenceNo("PA1744/002/001")
+                    .productName("Trinomia 100 mg/20 mg/2.5 mg hard capsules")
+                    .manufacturer("Ferrer Internacional, S.A")
+                    .strength("100 mg/20 mg/2.5 mg")
+                    .dosageForm("Capsule, hard")
+                    .activeSubstance("Aspirin, Ramipril, Atorvastatin calcium trihydrate")
+                    .isAvailable(true)
+                    .build();
+    }
+
+    public static DrugEntity createTestDrugH() {
         return DrugEntity.builder()
                     .licenceNo("PA23055/012/003")
                     .productName("Istin 5 mg hard capsule")
@@ -85,8 +121,11 @@ public final class TestData {
         return PharmacyEntity.builder()
                     .psiRegNo(1234)
                     .pharmacyName("Pharmacy A")
+                    .address("Test Address")
                     .eircode("AAAAAAA")
                     .phoneNo("0123456789")
+                    .email("test@email.com")
+                    .password("password")
                     .build();
     }
 
@@ -154,12 +193,12 @@ public final class TestData {
 
     public static DrugDto createTestDrugDtoB() {
         return DrugDto.builder()
-                    .licenceNo("PA2242/013/003")
-                    .productName("Nexium 40 mg gastro-resistant tablets")
-                    .manufacturer("Grunenthal Pharma Ltd")
-                    .strength("40 mg")
-                    .dosageForm("Gastro-resistant tablet")
-                    .activeSubstance("Esomeprazole")
+                    .licenceNo("PA0865/017/001")
+                    .productName("Konverge 20 mg/5 mg film-coated tablets")
+                    .manufacturer("Menarini International Operations Luxembourg S.A.")
+                    .strength("20 mg/5 mg")
+                    .dosageForm("Film-coated tablet")
+                    .activeSubstance("Olmesartan medoxomil, Amlodipine")
                     .isAvailable(true)
                     .build();
     }
@@ -176,13 +215,76 @@ public final class TestData {
                     .build();
     }    
 
+    public static DrugDto createTestDrugDtoD() {
+        return DrugDto.builder()
+                    .licenceNo("PA1410/037/001")
+                    .productName("Aspirin 300mg Effervescent tablets")
+                    .manufacturer("Bayer Limited")
+                    .strength("300mg")
+                    .dosageForm("Effervescent tablet")
+                    .activeSubstance("Aspirin")
+                    .isAvailable(true)
+                    .build();
+    }  
+
+    public static DrugDto createTestDrugDtoE() {
+        return DrugDto.builder()
+                    .licenceNo("PA2315/189/001")
+                    .productName("Nuprin 75mg gastro-resistant tablets")
+                    .manufacturer("Accord Healthcare Ireland Ltd.")
+                    .strength("75mg")
+                    .dosageForm("Gastro-resistant tablet")
+                    .activeSubstance("Acetylsalicylic acid")
+                    .isAvailable(true)
+                    .build();
+    }   
+
+    public static DrugDto createTestDrugDtoF() {
+        return DrugDto.builder()
+                    .licenceNo("PA1744/002/003")
+                    .productName("Trinomia 100 mg/20 mg/10 mg hard capsules")
+                    .manufacturer("Ferrer Internacional, S.A")
+                    .strength("100 mg/20 mg/10 mg")
+                    .dosageForm("Capsule, hard")
+                    .activeSubstance("Acetylsalicylic acid, Ramipril, Atorvastatin calcium trihydrate")
+                    .isAvailable(true)
+                    .build();
+    }   
+
+    public static DrugDto createTestDrugDtoG() {
+        return DrugDto.builder()
+                    .licenceNo("PA1744/002/001")
+                    .productName("Trinomia 100 mg/20 mg/2.5 mg hard capsules")
+                    .manufacturer("Ferrer Internacional, S.A")
+                    .strength("100 mg/20 mg/2.5 mg")
+                    .dosageForm("Capsule, hard")
+                    .activeSubstance("Aspirin, Ramipril, Atorvastatin calcium trihydrate")
+                    .isAvailable(true)
+                    .build();
+    }   
+
+    public static DrugDto createTestDrugDtoH() {
+        return DrugDto.builder()
+                    .licenceNo("PA23055/012/003")
+                    .productName("Istin 5 mg hard capsule")
+                    .manufacturer("Upjohn EESV")
+                    .strength("5 mg")
+                    .dosageForm("Capsule, hard")
+                    .activeSubstance("Amlodipine")
+                    .isAvailable(true)
+                    .build();
+    }   
+
     // Pharmacy Entity Test Methods
     public static PharmacyDto createTestPharmacyDtoA() {
         return PharmacyDto.builder()
                     .psiRegNo(1234)
                     .pharmacyName("Pharmacy A")
+                    .address("Test Address")
                     .eircode("AAAAAAA")
                     .phoneNo("0123456789")
+                    .email("test@email.com")
+                    .password("password")
                     .build();
     }
 

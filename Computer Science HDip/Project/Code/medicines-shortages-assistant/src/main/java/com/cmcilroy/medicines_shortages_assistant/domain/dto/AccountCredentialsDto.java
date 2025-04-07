@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor // required for Jackson, typically creates object using NoArgsConstructor then uses Setters to set values on the object
+@NoArgsConstructor
 @Builder
 public class AccountCredentialsDto {
 

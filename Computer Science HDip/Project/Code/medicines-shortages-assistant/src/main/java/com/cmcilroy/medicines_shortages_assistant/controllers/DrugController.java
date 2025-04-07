@@ -36,66 +36,6 @@ public class DrugController {
         this.paginator = paginator;
     }
 
-    // // using PUT rather than POST because I am providing the Id (licenceNo)
-    // @PutMapping(path = "/drugs/{licenceNo}")
-    // // RequestBodyAnnotation tells Spring to look at the HTTP request body for the DrugDto object represented as JSON and convert to Java
-    // public ResponseEntity<DrugDto> createUpdateDrug(
-    // @PathVariable("licenceNo") String licenceNo,
-    // @RequestBody DrugDto drugDto) {
-    //     // decode licence no from URL format
-    //     String decodedLicenceNo = URLDecoder.decode(licenceNo, StandardCharsets.UTF_8);
-    //     // map Dto to Entity
-    //     DrugEntity drugEntity = drugMapper.mapFrom(drugDto);
-    //     // check if drug already exists in the database
-    //     boolean drugExists = drugService.isPresent(decodedLicenceNo);
-    //     // save the Entity in the database
-    //     DrugEntity savedDrugEntity = drugService.saveDrug(decodedLicenceNo, drugEntity);
-    //     // map the entity back to a Dto
-    //     DrugDto savedDrugDto = drugMapper.mapTo(savedDrugEntity);
-    //     // return the relevant HTTP status code
-    //     if(drugExists){
-    //         // update existing record
-    //         return new ResponseEntity<>(savedDrugDto, HttpStatus.OK);
-    //     }
-    //     else{
-    //         // create new record
-    //         return new ResponseEntity<>(savedDrugDto, HttpStatus.CREATED);
-    //     }
-    // }
-
-    // // PATCH method to partially update a drug contained in the database
-    // @PatchMapping(path = "/drugs/{licenceNo}")
-    // // RequestBodyAnnotation tells Spring to look at the HTTP request body for the DrugDto object represented as JSON and convert to Java
-    // public ResponseEntity<DrugDto> partialUpdateDrug(
-    // @PathVariable("licenceNo") String licenceNo,
-    // @RequestBody DrugDto drugDto) {
-    //     // decode licence no from URL format
-    //     String decodedLicenceNo = URLDecoder.decode(licenceNo, StandardCharsets.UTF_8);
-
-    //     // check if drug exists in the database
-    //     if(!drugService.isPresent(decodedLicenceNo)){
-    //         // if it doesn't exist return HTTP 404 Not Found, cannot partially update a non-existent record
-    //         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    //     }
-    //     else{
-    //         // map Dto to Entity
-    //         DrugEntity drugEntity = drugMapper.mapFrom(drugDto);
-    //         // save the Entity in the database
-    //         DrugEntity updatedDrugEntity = drugService.partialUpdate(decodedLicenceNo, drugEntity);
-    //         // map the entity back to a Dto
-    //         DrugDto updatedDrugDto = drugMapper.mapTo(updatedDrugEntity);
-    //         return new ResponseEntity<>(updatedDrugDto, HttpStatus.OK);
-    //     }
-    // }
-
-
-    // GET method to return a paginated list of all drugs contained in the database
-    @GetMapping(path = "/drugs")
-    public Page<DrugDto> listAllDrugs(Pageable pageable) {
-        Page<DrugEntity> drugs = drugService.findAll(pageable);
-        return drugs.map(drugMapper::mapTo);
-    }
-
     // GET method to return a list of all drugs currently in short supply
     @GetMapping(path = "/drugs/shortages")
     public List<DrugDto> listAllShorts() {
@@ -146,10 +86,14 @@ public class DrugController {
     public ResponseEntity<Page<DrugDto>> listAlternativeDrugNames(@RequestParam String productName, Pageable pageable) {
         // find all DrugEntity records with product name passed in
         List<DrugEntity> drugs = drugService.findByContainsProductName(productName);
-        // replace the word 'and' with '&' and repeat search
-        drugs.addAll(drugService.findByContainsProductName(productName.replace("and", "&")));
-        // replace the word '&' with 'and' and repeat search
-        drugs.addAll(drugService.findByContainsProductName(productName.replace("&", "and")));
+        if(productName.contains("and")) {
+            // replace the word 'and' with '&' and repeat search
+            drugs.addAll(drugService.findByContainsProductName(productName.replace("and", "&")));
+        }
+        else if(productName.contains("&")) {
+            // replace the word '&' with 'and' and repeat search
+            drugs.addAll(drugService.findByContainsProductName(productName.replace("&", "and")));
+        }
         // if the list is empty, then no matching records were found
         if(drugs.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -191,28 +135,5 @@ public class DrugController {
             }
         }
     }
-
-    // // GET method to return drug by licenceNo
-    // @GetMapping(path = "/drugs/{licenceNo}")
-    // public ResponseEntity<DrugDto> getDrug(@PathVariable("licenceNo") String licenceNo) {
-    //     String decodedLicenceNo = URLDecoder.decode(licenceNo, StandardCharsets.UTF_8);
-    //     Optional<DrugEntity> foundDrug = drugService.findOne(decodedLicenceNo);
-    //     if(foundDrug.isPresent()){
-    //         DrugEntity drugEntity = foundDrug.get();
-    //         DrugDto drugDto = drugMapper.mapTo(drugEntity);
-    //         return new ResponseEntity<>(drugDto, HttpStatus.OK);
-    //     }
-    //     else{
-    //         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    //     }
-    // }
-
-    // // DELETE method to delete a specific drug from the database
-    // @DeleteMapping(path = "/drugs/{licenceNo}")
-    // public ResponseEntity<Void> deleteDrug(@PathVariable("licenceNo") String licenceNo) {
-    //     String decodedLicenceNo = URLDecoder.decode(licenceNo, StandardCharsets.UTF_8);
-    //     drugService.delete(decodedLicenceNo);
-    //     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    // }
 
 }
