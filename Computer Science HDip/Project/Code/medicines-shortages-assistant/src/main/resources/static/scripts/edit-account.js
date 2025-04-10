@@ -27,7 +27,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // validate that password matches the passwordRegex
         if (!passwordRegex.test(password) && password !== "") {
-            alert("Password must be at least 12 characters long, include at least one uppercase letter, one lowercase letter, one number, and one special character.");
+            messageContainer.style.display = "flex";
+            messageContainer.innerHTML = "Password must be at least 12 characters long, include at least one uppercase letter, one lowercase letter, one number, and one special character.";
             // if password is invalid, prevent form submission
             return; 
         }

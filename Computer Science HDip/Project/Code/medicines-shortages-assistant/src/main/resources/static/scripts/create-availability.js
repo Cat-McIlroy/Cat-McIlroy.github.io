@@ -35,7 +35,11 @@ document.addEventListener("DOMContentLoaded", function() {
             // if the response from the API is ok
             if (response.ok) {
                 // add success message to the screen
-                alert("Availability listing added successfully.");
+                messageContainer.style.display = "flex";
+                messageContainer.innerHTML = "Availability listing added successfully.";
+                setTimeout(() => {
+                        messageContainer.style.display = "none";
+                }, 3000);
             } 
             
             else {
@@ -44,6 +48,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 if(response.status == 409){
                     messageContainer.style.display = "flex";
                     messageContainer.innerHTML = "This account already has an availability listing for the selected product.";
+                    setTimeout(() => {
+                        messageContainer.style.display = "none";
+                    }, 3000);
                 }
                 else{
                     const responseData = await response.json();

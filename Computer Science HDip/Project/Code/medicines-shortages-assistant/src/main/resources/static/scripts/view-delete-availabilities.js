@@ -1,3 +1,58 @@
+function showConfirmModal(message, onConfirm) {
+    // check if modal already exists
+    let existingModal = document.getElementById("customConfirmModal");
+    if (existingModal) {
+        // if modal exists already, remove it
+        existingModal.remove();
+    }
+
+    // create modal wrapper
+    const modal = document.createElement("div");
+    modal.id = "customConfirmModal";
+    modal.style.cssText = `
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background-color: rgba(0,0,0,0.5);
+        display: flex; align-items: center; justify-content: center;
+        z-index: 1000;
+    `;
+
+    // create modal content
+    const content = document.createElement("div");
+    content.style.cssText = `
+        background: white;
+        border: 2px solid black;
+        padding: 20px;
+        text-align: center;
+        max-width: 300px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    `;
+
+    const msg = document.createElement("p");
+    msg.textContent = message;
+
+    const yesBtn = document.createElement("button");
+    yesBtn.textContent = "Yes";
+    yesBtn.style.cssText = "margin: 10px; padding: 8px 16px; background-color: lightgray; color: black; border: 2px solid black; cursor: pointer;";
+    yesBtn.onclick = () => {
+        modal.remove();
+        onConfirm();
+    };
+
+    const noBtn = document.createElement("button");
+    noBtn.textContent = "Cancel";
+    noBtn.style.cssText = "margin: 10px; padding: 8px 16px; background-color: lightgray; color: black; border: 2px solid black; cursor: pointer;";
+    noBtn.onclick = () => modal.remove();
+
+    // append everything
+    content.appendChild(msg);
+    content.appendChild(yesBtn);
+    content.appendChild(noBtn);
+    modal.appendChild(content);
+    document.body.appendChild(modal);
+}
+
 document.addEventListener("DOMContentLoaded", function() {
     
     ////////////////////////////////////////////// DISPLAY EXISTING PHARMACY STOCK AVAILABILITIES ////////////////////////////////////////
@@ -6,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("display-availabilities").addEventListener("click", async function(event) {
 
         // use event.preventDefault to prevent page reload on button click
-        event.preventDefault(); 
+        event.preventDefault();
 
         // clear any previous message
         const messageContainer = document.getElementById("message-container");
@@ -15,15 +70,15 @@ document.addEventListener("DOMContentLoaded", function() {
         // clear any previous results
         const resultsContainer = document.getElementById("results-container");
         resultsContainer.innerHTML = "";
-        
+
         // clear welcome message
         document.getElementById("welcome").innerHTML = "";
-        
+
         // clear buttons
         const buttonsContainer = document.getElementById("buttons-container");
         buttonsContainer.innerHTML = "";
         buttonsContainer.classList.add("form-buttons");
-        
+
         // create "Back" button
         const backButton = document.createElement("button");
         backButton.textContent = "Back";
@@ -37,17 +92,15 @@ document.addEventListener("DOMContentLoaded", function() {
         // start from page 0
         let currentPage = 0;
 
+        // function to get availabilities for a specific page
         async function getAvailabilities(page) {
         
             // add necessary query parameters
             const url = new URL("http://localhost:8080/pharmacy-drug-availabilities/view-all");
-            // pagination parameter
-            url.searchParams.append("page", page);
-            // number of results per page
-            url.searchParams.append("size", 10);
+            url.searchParams.append("page", page); // pagination parameter
+            url.searchParams.append("size", 10); // number of results per page
 
             try {
-
                 // call backend view all pharmacy drug availabilities API
                 const response = await fetch(url, {
                     method: "GET",
@@ -57,18 +110,15 @@ document.addEventListener("DOMContentLoaded", function() {
                     credentials: "include"
                 });
 
-
                 // if the response from the API is ok
                 if (response.ok && response.status !== 204) {
                     // update the page to display the paginated list of availability listings returned by the API
                     const results = await response.json();
                     displayAvailabilityListings(results);
                 } 
-
                 else {
                     messageContainer.style.display = "flex";
-                    // extract the http status from the view all availabilities API and throw it as a new error
-                    // or if it is an undefined error, display generic error message
+                    // handle error responses
                     if(response.status == 204){
                         messageContainer.innerHTML = "You currently have no stock availability listings.";
                     }
@@ -77,7 +127,6 @@ document.addEventListener("DOMContentLoaded", function() {
                         throw new Error(responseData.error || "An error occurred. Please try again.");
                     }
                 }
-
             } catch (error) {
                 // catch error thrown by try block and display it as a message
                 console.error("Error:", error);
@@ -85,7 +134,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 messageContainer.innerHTML = error.message;
             }
         }
-        
+
+        // function to display availability listings in a table
         function displayAvailabilityListings(results) {
             
             // clear previous page of results
@@ -94,7 +144,7 @@ document.addEventListener("DOMContentLoaded", function() {
             // display message
             messageContainer.style.display = "flex";
             messageContainer.innerHTML = "Stock availability listings for your pharmacy:";
-            
+
             // create results table
             const table = document.createElement("table");
             table.classList.add("results-table");
@@ -108,7 +158,6 @@ document.addEventListener("DOMContentLoaded", function() {
                     <th></th>
                 </tr>
             `;
-            // append headers to the table
             table.appendChild(thead);
 
             // create the table body
@@ -128,7 +177,7 @@ document.addEventListener("DOMContentLoaded", function() {
             // append the table body to the table
             table.appendChild(tbody);
             resultsContainer.appendChild(table);
-            
+
             // add event listener for delete buttons using event delegation
             table.addEventListener("click", async function (e) {
                 // if the element clicked in the table is a delete button
@@ -136,34 +185,39 @@ document.addEventListener("DOMContentLoaded", function() {
                     // extract the stock availability id from the delete button
                     const idToDelete = e.target.getAttribute("data-id");
                     // ask the user if they are sure they wish to delete the listing
-                    if (confirm("Are you sure you want to delete this listing?")) {
+                    showConfirmModal("Are you sure you want to delete this listing?", async function() {
                         try {
                             const response = await fetch(`http://localhost:8080/pharmacy-drug-availabilities/delete/${idToDelete}`, {
                                 method: "DELETE",
                                 credentials: "include"
                             });
                             if (response.status === 204) {
-                                alert("Listing deleted successfully.");
                                 // refresh the page
                                 getAvailabilities(currentPage);
+                                setTimeout(() => {
+                                    messageContainer.innerHTML += "<br><br>Listing deleted successfully.";
+                                }, 60);
+                                setTimeout(() => {
+                                    messageContainer.innerHTML = "Stock availability listings for your pharmacy:";
+                                }, 3000);
                             } else {
                                 const responseData = await response.json();
                                 throw new Error(responseData.error || "An error occurred. Please try again.");
                             }
                         } catch (error) {
-                            // catch error thrown by try block and display it as a message
                             console.error("Error:", error);
+                            messageContainer.style.display = "flex";
                             messageContainer.innerHTML = error.message;
                         }
-                    }
+                    });
                 }
             });
 
             // pagination controls
             const paginationControls = document.createElement("div");
             paginationControls.classList.add("pagination-controls");
-            
-            // if it isn't the first page of results, append a "Previous" button to allow for navigation to previous pages
+
+            // add "Previous" button if it's not the first page
             if (!results.first) {
                 const prevButton = document.createElement("button");
                 prevButton.textContent = "Previous";
@@ -173,8 +227,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 };
                 paginationControls.appendChild(prevButton);
             }
-            
-            // similarly, if it isn't the last page, append a "Next" button to allow for navigation to subsequent pages
+
+            // add "Next" button if it's not the last page
             if (!results.last) {
                 const nextButton = document.createElement("button");
                 nextButton.textContent = "Next";
@@ -188,10 +242,9 @@ document.addEventListener("DOMContentLoaded", function() {
             // append the pagination controls to the results container
             resultsContainer.appendChild(paginationControls);
         }
-        
+
         // starting from page 0 as defined above
         getAvailabilities(currentPage);
-        
     });
-    
+
 });

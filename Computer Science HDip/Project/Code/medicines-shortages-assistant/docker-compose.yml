@@ -1,9 +1,9 @@
-services:
+version: '3.8'
 
-  db:
-    image: postgres
+services:
+  frontend:
+    image: nginx:alpine
     ports:
-      - "5432:5432"
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: password
+      - "5500:80"
+    volumes:
+      - ./src/main/resources/static:/usr/share/nginx/html:ro

@@ -30,7 +30,6 @@ public class SecurityConfig{
         // allow Five Server origins, all methods and headers for duration of development and testing. this would be changed in production
         configuration.addAllowedOrigin("http://localhost:5500");
         configuration.addAllowedOrigin("http://127.0.0.1:5500");
-        configuration.addAllowedOrigin("*");
         configuration.addAllowedMethod("*");  
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);  

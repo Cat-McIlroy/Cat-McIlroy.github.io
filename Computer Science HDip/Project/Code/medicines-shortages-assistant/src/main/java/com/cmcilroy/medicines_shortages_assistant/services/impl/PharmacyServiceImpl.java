@@ -58,7 +58,7 @@ public class PharmacyServiceImpl implements PharmacyService{
             throw new IllegalArgumentException("Invalid PSI registration number.");
         }
         // check if a record already exists with this PSI registration number
-        else if(pharmacyRepository.existsById(pharmacy.getPsiRegNo())) {
+        else if(pharmacyRepository.existsById(pharmacy.getPsiRegNo()) || (pharmacyRepository.findByEmail(pharmacy.getEmail()).isPresent())) {
             // if an account already exists with this PSI number, throw error
             throw new IllegalArgumentException("This account already exists.");
         }

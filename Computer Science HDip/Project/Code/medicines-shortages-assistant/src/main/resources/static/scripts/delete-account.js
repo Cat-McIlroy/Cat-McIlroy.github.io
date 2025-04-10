@@ -31,7 +31,13 @@ document.addEventListener("DOMContentLoaded", function() {
             messageContainer.style.display = "flex";
             if (response.status == 204) {
                 // if account deletion is successful, display an alert
-                alert("Account deleted successfully.");
+                messageContainer.innerHTML = "Account deleted successfully.";
+                // clear other messages, password field and delete account button
+                const deleteForm = document.getElementById("delete-form");
+                deleteForm.innerHTML = "";
+                
+                // wait 5 seconds
+                await new Promise(resolve => setTimeout(resolve, 3000)); 
                 
                 // sign the user out
                 try {
@@ -58,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
 
                 // clear other messages, password field and delete account button
-                const deleteForm = document.getElementById("delete-form");
+                deleteForm = document.getElementById("delete-form");
                 deleteForm.innerHTML = "";
             }
             else if(response.status == 404) {

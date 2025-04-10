@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function() {
             address = address1 + ", " + address2 + ", " + address3;
         }
         
-        const eircode = document.getElementById("eircode").value;
+        const eircode = document.getElementById("eircode").value.replace(/\s+/g, '');
         const phoneNo = document.getElementById("contact").value;
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
@@ -44,7 +44,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // validate that password matches the passwordRegex
         if (!passwordRegex.test(password)) {
-            alert("Password must be at least 12 characters long, include at least one uppercase letter, one lowercase letter, one number, and one special character.");
+            messageContainer.style.display = "flex";
+            messageContainer.innerHTML = "Password must be at least 12 characters long, include at least one uppercase letter, one lowercase letter, one number, and one special character.";
             // if password is invalid, prevent form submission
             return; 
         }
